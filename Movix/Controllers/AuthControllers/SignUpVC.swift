@@ -7,19 +7,26 @@
 
 import UIKit
 
-class SignUpVC: UIViewController {
+protocol SignUpViewModelDelegate: AnyObject {
+    func message(message: String, isSuccess: Bool)
+    func updateIndicator(isLoading: Bool)
+}
+
+class SignUpVC: UIViewController, SignUpViewModelDelegate {
     
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var passwordConfrimTextField: UITextField!
-    @IBOutlet weak var signUpButton: UIButton!
-    @IBOutlet weak var subTitleLabel: UILabel!
+    @IBOutlet weak var passwordTextField: PasswordTextField!
+    @IBOutlet weak var passwordConfrimTextField: PasswordTextField!
+    @IBOutlet weak var signUpButton: LoadingButton!
+    @IBOutlet weak var subtitleLabel: UILabel!
+    
+    let viewModel = SignUpViewModel(service: AuthService())
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        viewModel.delegate = self
         configureUI()
     }
 
@@ -42,7 +49,51 @@ class SignUpVC: UIViewController {
     }
     
     @IBAction func signUpBtnTapped(_ sender: Any) {
+        if let nameText = nameTextField.text, let emailText = emailTextField.text, let passwordText = passwordTextField.text, let passwordConfrimText = passwordConfrimTextField.text{
+            let result = validateData(nameText: nameText, emailText: emailText, passwordText: passwordText, passwordConfrimText: passwordConfrimText)
+            if result{
+                viewModel.signUp(name: nameText, email: emailText, password: passwordText, passwordConfrim: passwordConfrimText)
+            }
+        }
+    }
+    
+    func validateData(nameText: String, emailText: String, passwordText: String, passwordConfrimText: String) -> Bool {
+        if nameText.isEmpty || emailText.isEmpty || passwordText.isEmpty || passwordConfrimText.isEmpty {
+            message(message: "Please fill in all the required fields")
+            return false
+        }
         
+        if !emailText.isValidEmail() {
+            message(message: "Email is not valid")
+            return false
+        }
+        
+        if passwordText != passwordConfrimText{
+            message(message: "Passwords do not match")
+            return false
+        }
+        
+        if !passwordText.isValidPassword() {
+            message(message: "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter.")
+            return false
+        }
+        
+        return true
+    }
+    
+    func message(message: String, isSuccess: Bool = false) {
+        DispatchQueue.main.async {
+            self.subtitleLabel.text = message
+            self.subtitleLabel.textColor = isSuccess ? UIColor(red: 0, green: 0.5, blue: 0, alpha: 1) : UIColor(red: 0.8, green: 0, blue: 0, alpha: 1)
+        }
+    }
+    
+    func updateIndicator(isLoading: Bool) {
+        if isLoading {
+            signUpButton.showLoading()
+        } else {
+            signUpButton.hideLoading()
+        }
     }
     
 
