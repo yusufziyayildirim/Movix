@@ -17,7 +17,7 @@ final class URLSessionNetworkManager: NetworkManager {
     private init() {
         self.configuration = URLSessionConfiguration.default
         self.configuration.timeoutIntervalForRequest = 30.0
-        self.configuration.httpAdditionalHeaders = ["Content-Type": "application/json"]
+        self.configuration.httpAdditionalHeaders = ["Accept": "application/json"]
         
         self.session = URLSession(configuration: self.configuration)
     }
@@ -44,10 +44,10 @@ final class URLSessionNetworkManager: NetworkManager {
             }
             
             // Validation
-            guard (200...299).contains((response as? HTTPURLResponse)?.statusCode ?? 0) else {
+            /*guard (200...299).contains((response as? HTTPURLResponse)?.statusCode ?? 0) else {
                 completion(.failure(AppError.httpFailure))
                 return
-            }
+            }*/
             
             // onSuccess
             if let data = data {
@@ -77,8 +77,8 @@ final class URLSessionNetworkManager: NetworkManager {
         do {
             let result = try JSONDecoder().decode(T.self, from: data)
             completion(.success(result))
-            
         } catch {
+            print(String(describing: error))
             completion(.failure(AppError.decodingError))
         }
     }
