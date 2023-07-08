@@ -24,6 +24,8 @@
 		F61499972A577D98003AC47D /* VerifyEmailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61499962A577D98003AC47D /* VerifyEmailVC.swift */; };
 		F61499992A577DB7003AC47D /* ForgotPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61499982A577DB7003AC47D /* ForgotPasswordVC.swift */; };
 		F614999B2A577DF1003AC47D /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F614999A2A577DF1003AC47D /* MainVC.swift */; };
+		F6E5CF0D2A58514D002D8798 /* UITextField+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E5CF0C2A58514D002D8798 /* UITextField+Ext.swift */; };
+		F6E5CF0F2A585F4D002D8798 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E5CF0E2A585F4D002D8798 /* UIView+Ext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +48,8 @@
 		F61499962A577D98003AC47D /* VerifyEmailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyEmailVC.swift; sourceTree = "<group>"; };
 		F61499982A577DB7003AC47D /* ForgotPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordVC.swift; sourceTree = "<group>"; };
 		F614999A2A577DF1003AC47D /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
+		F6E5CF0C2A58514D002D8798 /* UITextField+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Ext.swift"; sourceTree = "<group>"; };
+		F6E5CF0E2A585F4D002D8798 /* UIView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +82,7 @@
 		F61499642A576BAF003AC47D /* Movix */ = {
 			isa = PBXGroup;
 			children = (
+				F6E5CF0B2A585135002D8798 /* Extensions */,
 				F61499872A577863003AC47D /* Resources */,
 				F614997B2A577796003AC47D /* Controllers */,
 				F61499882A57788C003AC47D /* Storyboards */,
@@ -146,6 +151,15 @@
 				F614996B2A576BAF003AC47D /* Main.storyboard */,
 			);
 			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		F6E5CF0B2A585135002D8798 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				F6E5CF0C2A58514D002D8798 /* UITextField+Ext.swift */,
+				F6E5CF0E2A585F4D002D8798 /* UIView+Ext.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -222,7 +236,9 @@
 			files = (
 				F614998A2A577964003AC47D /* MovieDetailVC.swift in Sources */,
 				F61499862A577850003AC47D /* ProfileVC.swift in Sources */,
+				F6E5CF0F2A585F4D002D8798 /* UIView+Ext.swift in Sources */,
 				F61499992A577DB7003AC47D /* ForgotPasswordVC.swift in Sources */,
+				F6E5CF0D2A58514D002D8798 /* UITextField+Ext.swift in Sources */,
 				F61499932A577D6F003AC47D /* SignInVC.swift in Sources */,
 				F61499972A577D98003AC47D /* VerifyEmailVC.swift in Sources */,
 				F61499802A577817003AC47D /* HomeVC.swift in Sources */,
