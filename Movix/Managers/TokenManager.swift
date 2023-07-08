@@ -14,8 +14,12 @@ final class TokenManager{
     
     private init (){}
     
-    func saveBearerTokenToKeychain(token: String){
-        deleteBearerTokenFromKeychain()
+    func saveBearerTokenToKeychain(token: String) throws {
+        do {
+            try TokenManager.shared.deleteBearerTokenFromKeychain()
+        } catch {
+            print(error.localizedDescription)
+        }
         
         let keychainQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -27,14 +31,12 @@ final class TokenManager{
         
         let status = SecItemAdd(keychainQuery as CFDictionary, nil)
         
-        if status == errSecSuccess {
-            let bearerToken = "Bearer \(token)"
-        } else {
-            print("Failed to save bearer token to Keychain")
+        if status != errSecSuccess {
+            throw AppError.custom("tokenSaveFailed")
         }
     }
     
-    func getBearerTokenFromKeychain() -> String {
+    func getBearerTokenFromKeychain() throws -> String {
         let keychainQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: "com.ysfyldrm.Movix",
@@ -49,12 +51,11 @@ final class TokenManager{
         if status == errSecSuccess, let tokenData = result as? Data, let token = String(data: tokenData, encoding: .utf8) {
             return token
         } else {
-            print(errSecSuccess)
-            return ""
+            throw AppError.custom("tokenLoadFailed")
         }
     }
     
-    func deleteBearerTokenFromKeychain() {
+    func deleteBearerTokenFromKeychain() throws {
         let keychainQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: "com.ysfyldrm.Movix",
@@ -64,7 +65,7 @@ final class TokenManager{
         let status = SecItemDelete(keychainQuery as CFDictionary)
         
         if status != errSecSuccess {
-            print(status)
+            throw AppError.custom("tokenDeleteFailed")
         }
     }
     
