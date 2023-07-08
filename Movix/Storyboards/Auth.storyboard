@@ -162,7 +162,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ee2-s3-Rgy">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ee2-s3-Rgy" customClass="LoadingButton" customModule="Movix" customModuleProvider="target">
                                 <rect key="frame" x="25" y="563.33333333333337" width="343" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="Xlm-up-q3h"/>
@@ -206,7 +206,7 @@
                         <outlet property="nameTextField" destination="hca-T4-Nf3" id="9l4-dd-e3W"/>
                         <outlet property="passwordConfrimTextField" destination="T6Q-rq-AMC" id="EfS-wG-c6M"/>
                         <outlet property="passwordTextField" destination="Vdp-pQ-2KI" id="IdA-ZE-1he"/>
-                        <outlet property="signUpButton" destination="ee2-s3-Rgy" id="QRL-J0-Dgd"/>
+                        <outlet property="signUpButton" destination="ee2-s3-Rgy" id="Oen-yQ-G5T"/>
                         <outlet property="subTitleLabel" destination="1rY-N0-Yuk" id="W9y-f1-UFl"/>
                     </connections>
                 </viewController>
@@ -254,7 +254,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jH3-nA-bDg">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jH3-nA-bDg" customClass="LoadingButton" customModule="Movix" customModuleProvider="target">
                                 <rect key="frame" x="25" y="459.33333333333331" width="343" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="9PF-tM-VRQ"/>
@@ -323,7 +323,7 @@
                     <connections>
                         <outlet property="emailTextField" destination="zb4-hk-xNm" id="T9i-NN-hRx"/>
                         <outlet property="passwordTextField" destination="UI9-h1-oFu" id="coZ-Co-VjZ"/>
-                        <outlet property="signInButton" destination="jH3-nA-bDg" id="ZbY-16-3Gr"/>
+                        <outlet property="signInButton" destination="jH3-nA-bDg" id="Ux4-8C-jia"/>
                         <outlet property="subtitleLabel" destination="J4T-05-oX0" id="Zeb-Dc-Vn9"/>
                         <outlet property="verifyEmailButton" destination="VEz-Ru-FYg" id="lax-Oc-7jR"/>
                     </connections>
@@ -363,7 +363,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8oC-2U-Ygf">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8oC-2U-Ygf" customClass="LoadingButton" customModule="Movix" customModuleProvider="target">
                                 <rect key="frame" x="25" y="348.33333333333331" width="343" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="bXx-Ry-dIX"/>
@@ -395,7 +395,7 @@
                     <navigationItem key="navigationItem" id="Xdu-df-Usb"/>
                     <connections>
                         <outlet property="emailTextField" destination="9z8-3W-fJh" id="0DE-WN-m8B"/>
-                        <outlet property="sendButton" destination="8oC-2U-Ygf" id="an7-6s-JfG"/>
+                        <outlet property="sendButton" destination="8oC-2U-Ygf" id="AK6-c7-cm0"/>
                         <outlet property="subtitleLabel" destination="6hC-3B-apW" id="FAu-kL-5g8"/>
                     </connections>
                 </viewController>
@@ -453,7 +453,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MSh-uv-b3U">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MSh-uv-b3U" customClass="LoadingButton" customModule="Movix" customModuleProvider="target">
                                 <rect key="frame" x="25" y="348.33333333333331" width="343" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="Kgm-jz-OYa"/>
@@ -485,7 +485,7 @@
                     <navigationItem key="navigationItem" id="mUa-A5-qQZ"/>
                     <connections>
                         <outlet property="emailTextField" destination="9rt-aK-JRo" id="l8f-zA-n6w"/>
-                        <outlet property="sendButton" destination="MSh-uv-b3U" id="5DD-51-g37"/>
+                        <outlet property="sendButton" destination="MSh-uv-b3U" id="2rV-jv-wpI"/>
                         <outlet property="subtitleLabel" destination="lsz-IS-FNX" id="fJn-C9-E22"/>
                     </connections>
                 </viewController>
