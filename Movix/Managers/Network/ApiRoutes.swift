@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum APIURLs {
+enum ApiRoutes {
     
     private static var laravelBaseUrl = "https://movixapi.innovaticacode.com/api"
     
