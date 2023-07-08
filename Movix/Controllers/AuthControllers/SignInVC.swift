@@ -7,17 +7,27 @@
 
 import UIKit
 
-class SignInVC: UIViewController {
+protocol SignInViewModelDelegate: AnyObject {
+    func message(message: String)
+    func updateIndicator(isLoading: Bool)
+    func showVerifyEmailButton()
+    func navigateToHomeVC()
+}
 
+final class SignInVC: UIViewController, SignInViewModelDelegate {
+    
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var signInButton: UIButton!
+    @IBOutlet weak var passwordTextField: PasswordTextField!
+    @IBOutlet weak var signInButton: LoadingButton!
     @IBOutlet weak var verifyEmailButton: UIButton!
-        
+    
+    let viewModel = SignInViewModel(service: AuthService())
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        viewModel.delegate = self
         configureUI()
     }
     
@@ -34,14 +44,63 @@ class SignInVC: UIViewController {
         
         verifyEmailButton.layer.cornerRadius = 10
         verifyEmailButton.clipsToBounds = true
-        verifyEmailButton.isHidden = false
+        verifyEmailButton.isHidden = true
         verifyEmailButton.addShadow(opacity: 0.2, shadowRadius: 5)
     }
     
     @IBAction func signInButtonTapped(_ sender: Any) {
+        verifyEmailButton.isHidden = true
+        
+        if let emailText = emailTextField.text, let passwordText = passwordTextField.text {
+            let result = validateData(emailText: emailText, passwordText: passwordText)
+            if result {
+                viewModel.signIn(email: emailText, password: passwordText)
+            }
+        }
+    }
+   
+    func validateData(emailText: String, passwordText: String) -> Bool {
+        if emailText.isEmpty || passwordText.isEmpty {
+            message(message: "Email and password fields are required")
+            return false
+        }
+        
+        if !emailText.isValidEmail() {
+            message(message: "Email is not valid")
+            return false
+        }
+        
+        return true
     }
     
-    @IBAction func verifyEmailButton(_ sender: Any) {
+    func message(message: String) {
+        DispatchQueue.main.async {
+            self.subtitleLabel.text = message
+            self.subtitleLabel.textColor = UIColor(red: 0.8, green: 0, blue: 0, alpha: 1)
+        }
+    }
+    
+    func updateIndicator(isLoading: Bool) {
+        if isLoading {
+            signInButton.showLoading()
+        } else {
+            signInButton.hideLoading()
+        }
+    }
+    
+    func showVerifyEmailButton() {
+        DispatchQueue.main.async {
+            self.verifyEmailButton.isHidden = false
+        }
+    }
+    
+    func navigateToHomeVC() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        DispatchQueue.main.async {
+            guard let mainView = storyboard.instantiateInitialViewController() else { return }
+            mainView.modalPresentationStyle = .fullScreen
+            self.present(mainView, animated: true, completion: nil)
+        }
     }
     
 }
