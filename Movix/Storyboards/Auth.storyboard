@@ -141,7 +141,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vdp-pQ-2KI">
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vdp-pQ-2KI" customClass="PasswordTextField" customModule="Movix" customModuleProvider="target">
                                 <rect key="frame" x="25" y="408.33333333333331" width="343" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="cWu-M7-L7n"/>
@@ -149,9 +149,9 @@
                                     <constraint firstAttribute="height" constant="50" id="zru-yK-bXr"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password Confrim" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="T6Q-rq-AMC">
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password Confrim" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="T6Q-rq-AMC" customClass="PasswordTextField" customModule="Movix" customModuleProvider="target">
                                 <rect key="frame" x="25" y="478.33333333333331" width="343" height="49.999999999999943"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="3Hk-gW-0E0"/>
@@ -160,7 +160,7 @@
                                     <constraint firstAttribute="height" constant="50" id="ioT-dc-V3L"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ee2-s3-Rgy" customClass="LoadingButton" customModule="Movix" customModuleProvider="target">
                                 <rect key="frame" x="25" y="563.33333333333337" width="343" height="50"/>
@@ -204,10 +204,10 @@
                     <connections>
                         <outlet property="emailTextField" destination="7QR-TM-HNo" id="uT4-zh-1h3"/>
                         <outlet property="nameTextField" destination="hca-T4-Nf3" id="9l4-dd-e3W"/>
-                        <outlet property="passwordConfrimTextField" destination="T6Q-rq-AMC" id="EfS-wG-c6M"/>
-                        <outlet property="passwordTextField" destination="Vdp-pQ-2KI" id="IdA-ZE-1he"/>
+                        <outlet property="passwordConfrimTextField" destination="T6Q-rq-AMC" id="D8A-Nt-kSz"/>
+                        <outlet property="passwordTextField" destination="Vdp-pQ-2KI" id="Nqj-O6-GFd"/>
                         <outlet property="signUpButton" destination="ee2-s3-Rgy" id="Oen-yQ-G5T"/>
-                        <outlet property="subTitleLabel" destination="1rY-N0-Yuk" id="W9y-f1-UFl"/>
+                        <outlet property="subtitleLabel" destination="1rY-N0-Yuk" id="Ra7-IP-yRD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nIt-q8-ntb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -245,7 +245,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UI9-h1-oFu">
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UI9-h1-oFu" customClass="PasswordTextField" customModule="Movix" customModuleProvider="target">
                                 <rect key="frame" x="25" y="338.33333333333331" width="343" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="2y0-b2-OTa"/>
@@ -291,7 +291,6 @@
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="signUpBtnTapped:" destination="NDp-B6-JBh" eventType="touchUpInside" id="Iym-vl-Lpz"/>
-                                    <action selector="verifyEmailButton:" destination="v51-ea-vi1" eventType="touchUpInside" id="gOG-lb-m1y"/>
                                     <segue destination="TOn-lw-Z54" kind="show" id="1cN-xb-bE0"/>
                                 </connections>
                             </button>
@@ -322,7 +321,7 @@
                     <navigationItem key="navigationItem" id="VAV-XJ-sEA"/>
                     <connections>
                         <outlet property="emailTextField" destination="zb4-hk-xNm" id="T9i-NN-hRx"/>
-                        <outlet property="passwordTextField" destination="UI9-h1-oFu" id="coZ-Co-VjZ"/>
+                        <outlet property="passwordTextField" destination="UI9-h1-oFu" id="xDv-xM-Zai"/>
                         <outlet property="signInButton" destination="jH3-nA-bDg" id="Ux4-8C-jia"/>
                         <outlet property="subtitleLabel" destination="J4T-05-oX0" id="Zeb-Dc-Vn9"/>
                         <outlet property="verifyEmailButton" destination="VEz-Ru-FYg" id="lax-Oc-7jR"/>
