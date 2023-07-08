@@ -33,6 +33,6 @@ enum ApiRoutes {
     }
     
     static func resendVerifyEmail() -> String {
-        "\(laravelBaseUrl)/verification-notification"
+        "\(laravelBaseUrl)/email/verification-notification"
     }
 }
