@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="322" id="KGk-i7-Jjw" customClass="HomeTableViewCell" customModule="Movix" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="322"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="322"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OgH-Fq-P6t">
+                        <rect key="frame" x="5" y="5" width="310" height="312"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h9S-Lb-4Wi">
+                                <rect key="frame" x="15" y="12" width="39" height="24"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Cp-JV-BNU">
+                                <rect key="frame" x="237.66666666666666" y="12" width="64.333333333333343" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="24" id="8C3-ae-gNs"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain">
+                                    <attributedString key="attributedTitle">
+                                        <fragment content="See all">
+                                            <attributes>
+                                                <font key="NSFont" metaFont="system"/>
+                                                <paragraphStyle key="NSParagraphStyle" alignment="right" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                    <color key="baseForegroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="seeAllBtnTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Jll-bp-GQP"/>
+                                </connections>
+                            </button>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="tq4-Cc-OOP">
+                                <rect key="frame" x="0.0" y="44" width="310" height="268"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <inset key="scrollIndicatorInsets" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="5" minimumInteritemSpacing="0.0" id="FK5-fx-did">
+                                    <size key="itemSize" width="145" height="225"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="3Cp-JV-BNU" firstAttribute="top" secondItem="OgH-Fq-P6t" secondAttribute="top" constant="12" id="96v-mG-MVQ"/>
+                            <constraint firstItem="tq4-Cc-OOP" firstAttribute="leading" secondItem="OgH-Fq-P6t" secondAttribute="leading" id="AQd-ua-CZH"/>
+                            <constraint firstItem="h9S-Lb-4Wi" firstAttribute="top" secondItem="OgH-Fq-P6t" secondAttribute="top" constant="12" id="HPo-q1-KHJ"/>
+                            <constraint firstItem="h9S-Lb-4Wi" firstAttribute="leading" secondItem="OgH-Fq-P6t" secondAttribute="leading" constant="15" id="N8S-r5-ytz"/>
+                            <constraint firstAttribute="trailing" secondItem="tq4-Cc-OOP" secondAttribute="trailing" id="Upb-Jt-u4F"/>
+                            <constraint firstAttribute="trailing" secondItem="3Cp-JV-BNU" secondAttribute="trailing" constant="8" id="aUL-fx-ran"/>
+                            <constraint firstItem="tq4-Cc-OOP" firstAttribute="top" secondItem="h9S-Lb-4Wi" secondAttribute="bottom" constant="8" id="hCh-Ux-kG7"/>
+                            <constraint firstAttribute="bottom" secondItem="tq4-Cc-OOP" secondAttribute="bottom" id="rBT-Re-cUB"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="OgH-Fq-P6t" secondAttribute="trailing" constant="5" id="1gM-YK-pJs"/>
+                    <constraint firstItem="OgH-Fq-P6t" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="PpN-SN-viA"/>
+                    <constraint firstItem="OgH-Fq-P6t" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="kTI-au-dOp"/>
+                    <constraint firstAttribute="bottom" secondItem="OgH-Fq-P6t" secondAttribute="bottom" constant="5" id="pgp-dq-hmo"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <connections>
+                <outlet property="movieCollectionView" destination="tq4-Cc-OOP" id="QNc-F0-hyf"/>
+                <outlet property="tableViewCellTitle" destination="h9S-Lb-4Wi" id="MG7-Uq-JIy"/>
+            </connections>
+            <point key="canvasLocation" x="33.587786259541986" y="97.183098591549296"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
