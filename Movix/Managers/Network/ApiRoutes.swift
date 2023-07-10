@@ -59,6 +59,10 @@ enum ApiRoutes {
         "\(tmdbBaseUrl)/3/movie/upcoming"
     }
     
+    static func discoverMovies() -> String {
+        "\(tmdbBaseUrl)/3/discover/movie"
+    }
+    
     static func imageURL(posterPath: String) -> String {
         "https://image.tmdb.org/t/p/w500/\(posterPath)"
     }
