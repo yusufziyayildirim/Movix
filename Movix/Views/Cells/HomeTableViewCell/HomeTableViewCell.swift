@@ -8,16 +8,25 @@
 import UIKit
 import SDWebImage
 
+protocol HomeTableViewCellDelegate: AnyObject {
+    func seeAllButtonTapped(row: Int)
+    func didSelectItem()
+}
+
 class HomeTableViewCell: UITableViewCell {
     
     @IBOutlet weak var tableViewCellTitle: UILabel!
     @IBOutlet weak var movieCollectionView: UICollectionView!
+    
+    weak var delegate: HomeTableViewCellDelegate?
     
     public let id = "homeTableViewCell"
     public let nib = UINib(nibName: "HomeTableViewCell", bundle: nil)
     
     private var movies = [Movie]()
     private let cell = MovieCollectionViewCell()
+    
+    var row = Int()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -30,7 +39,7 @@ class HomeTableViewCell: UITableViewCell {
     }
     
     @IBAction func seeAllBtnTapped(_ sender: Any) {
-        print("tapped")
+        delegate?.seeAllButtonTapped(row: row)
     }
     
     public func setData(with movies: [Movie]) {
@@ -55,6 +64,10 @@ extension HomeTableViewCell: UICollectionViewDelegate, UICollectionViewDataSourc
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        delegate?.didSelectItem()
+    }
+    
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         
         let config = UIContextMenuConfiguration(
@@ -71,13 +84,6 @@ extension HomeTableViewCell: UICollectionViewDelegate, UICollectionViewDataSourc
                     //Tapped the button
                 }
                 
-                let downloadAction = UIAction(title: "Add watchedlist", image: UIImage(systemName: "bookmark.fill")) { _ in
-                    guard let _ = self else {
-                        return
-                    }
-                    //Tapped the button
-                }
-                
                 let watchAction = UIAction(title: "Add watchlist", image: UIImage(systemName: "bookmark")) { _ in
                     guard let _ = self else {
                         return
@@ -85,7 +91,14 @@ extension HomeTableViewCell: UICollectionViewDelegate, UICollectionViewDataSourc
                     //Tapped the button
                 }
                 
-                return UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [downloadAction, watchAction, favoriteAction])
+                let watchedAction = UIAction(title: "Add watchedlist", image: UIImage(systemName: "checkmark.seal")) { _ in
+                    guard let _ = self else {
+                        return
+                    }
+                    //Tapped the button
+                }
+                
+                return UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [favoriteAction, watchAction, watchedAction])
                 
             }
         return config
