@@ -24,14 +24,8 @@ class HomeVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         if let tabBarController = self.tabBarController {
-            let tabIndex = 0
-            
-            // TabBarItem'ı alın
-            if let tabBarItem = tabBarController.tabBar.items?[tabIndex] {
-                // Yeni görüntüyü oluşturun
+            if let tabBarItem = tabBarController.tabBar.items?[0] {
                 let newImage = UIImage(systemName: "house.fill")
-                
-                // Yeni görüntüyü TabBarItem'a atayın
                 tabBarItem.image = newImage
             }
         }
@@ -39,14 +33,11 @@ class HomeVC: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         if let tabBarController = self.tabBarController {
-            let tabIndex = 0
-            
-            if let tabBarItem = tabBarController.tabBar.items?[tabIndex] {
+            if let tabBarItem = tabBarController.tabBar.items?[0] {
                 let newImage = UIImage(systemName: "house")
                 tabBarItem.image = newImage
             }
         }
-        
     }
     
     func configureHomeTableView() {
@@ -72,6 +63,23 @@ class HomeVC: UIViewController {
             homeTableView.tableHeaderView = headerView.view
         }
     }
+    
+    func navigateToSeeAllScreen(row: Int) {
+        performSegue(withIdentifier: "toSeeAllVC", sender: row)
+    }
+    
+    func navigateToDetailScreen() {
+        performSegue(withIdentifier: "toMovieDetailVC", sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toSeeAllVC" {
+            if let destinationVC = segue.destination as? SeeAllVC, let row = sender as? Int{
+                destinationVC.url = viewModel.sectionList[row].url
+                destinationVC.pageTitle = viewModel.sectionList[row].title
+            }
+        }
+    }
 }
 
 
@@ -87,6 +95,8 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
         guard let homeTableViewCell = tableView.dequeueReusableCell(withIdentifier: cell.id, for: indexPath) as? HomeTableViewCell else {
             return UITableViewCell()
         }
+        homeTableViewCell.delegate = self
+        homeTableViewCell.row = indexPath.row
         homeTableViewCell.tableViewCellTitle.text = viewModel.sectionList[indexPath.row].title
         homeTableViewCell.setData(with: viewModel.sectionList[indexPath.row].movies)
         
@@ -97,4 +107,15 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
         return 280
     }
     
+}
+
+//Mark HomeTableViewCellDelegate
+extension HomeVC: HomeTableViewCellDelegate {
+    func seeAllButtonTapped(row: Int) {
+        navigateToSeeAllScreen(row: row)
+    }
+    
+    func didSelectItem() {
+        navigateToDetailScreen()
+    }
 }
