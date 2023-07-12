@@ -18,6 +18,7 @@ class DiscoverVC: UIViewController {
         
         addChild(discoverView)
         view.addSubview(discoverView.view)
+        self.title = "Discover"
     }
     
 

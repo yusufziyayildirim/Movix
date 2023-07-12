@@ -10,86 +10,93 @@ import SDWebImageSwiftUI
 
 struct DiscoverView: View {
     @StateObject var viewModel = DiscoverViewModel(service: MovieService())
+    @State private var showingProgressView = true
     
     var body: some View {
         VStack{
-            ZStack{
-                //Movies section
-                if viewModel.fetchedMovies.isEmpty{
-                    Text("There is no movie")
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                } else{
-                    //Displaying cards
-                    ForEach(viewModel.fetchedMovies.reversed()) { movie in
-                        StackCardView(movie: movie)
-                            .environmentObject(viewModel)
+            if showingProgressView {
+                Spacer()
+                ProgressView()
+                Spacer()
+            } else {
+                ZStack{
+                    if viewModel.fetchedMovies.isEmpty{
+                        Text("There is no movie")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                    } else{
+                        ForEach(viewModel.fetchedMovies.reversed()) { movie in
+                            StackCardView(movie: movie)
+                                .environmentObject(viewModel)
+                        }
                     }
-                }
-            }.padding(.top, 30)
-                .padding()
-                .padding(.vertical)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
-            //Action Buttons
-            HStack(spacing: 15){
+                }.padding(.top, 30)
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 
-                Button{
-                    getPrevious()
-                } label: {
-                    Image(systemName: "arrow.uturn.backward")
-                        .font(.system(size: 15, weight: .bold))
-                        .foregroundColor(.white)
-                        .shadow(radius: 5)
-                        .padding(13)
-                        .background(.gray)
-                        .clipShape(Circle())
-                }
-                
-                HStack{
-                    Button{
-                        
-                    } label: {
-                        Image(systemName: "bookmark")
-                            .font(.system(size: 15, weight: .bold))
-                            .foregroundColor(.white)
-                            .shadow(radius: 5)
-                            .padding(13)
-                            .background(.green)
-                            .clipShape(Circle())
-                    }
+                //Action Buttons
+                HStack(spacing: 15){
                     
                     Button{
-                        
+                        getPrevious()
                     } label: {
-                        Image(systemName: "star.fill")
+                        Image(systemName: "arrow.uturn.backward")
                             .font(.system(size: 15, weight: .bold))
                             .foregroundColor(.white)
                             .shadow(radius: 5)
                             .padding(13)
-                            .background(.yellow)
+                            .background(.gray)
                             .clipShape(Circle())
-                    }
+                    }.disabled(viewModel.removedMovies.isEmpty)
+                        .opacity((viewModel.removedMovies.isEmpty) ? 0.6 : 1)
                     
-                    Button{
+                    HStack{
+                        Button{
+                            
+                        } label: {
+                            Image(systemName: "bookmark")
+                                .font(.system(size: 15, weight: .bold))
+                                .foregroundColor(.white)
+                                .shadow(radius: 5)
+                                .padding(13)
+                                .background(.green)
+                                .clipShape(Circle())
+                        }
                         
-                    } label: {
-                        Image(systemName: "suit.heart.fill")
-                            .font(.system(size: 15, weight: .bold))
-                            .foregroundColor(.white)
-                            .shadow(radius: 5)
-                            .padding(13)
-                            .background(.red)
-                            .clipShape(Circle())
+                        Button{
+                            
+                        } label: {
+                            Image(systemName: "star")
+                                .font(.system(size: 15, weight: .bold))
+                                .foregroundColor(.white)
+                                .shadow(radius: 5)
+                                .padding(13)
+                                .background(.yellow)
+                                .clipShape(Circle())
+                        }
+                        
+                        Button{
+                            
+                        } label: {
+                            Image(systemName: "checkmark.seal")
+                                .font(.system(size: 15, weight: .bold))
+                                .foregroundColor(.white)
+                                .shadow(radius: 5)
+                                .padding(13)
+                                .background(.red)
+                                .clipShape(Circle())
+                        }
                     }
-                }
-                .disabled(viewModel.fetchedMovies.isEmpty)
-                .opacity((viewModel.fetchedMovies.isEmpty) ? 0.6 : 1)
-                
-            }.padding(.bottom)
+                    .disabled(viewModel.fetchedMovies.isEmpty)
+                    .opacity((viewModel.fetchedMovies.isEmpty) ? 0.6 : 1)
+                    
+                }.padding(.bottom)
+            }
         }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .onAppear {
-                viewModel.getDiscoverMovies()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    showingProgressView = false
+                }
             }
     }
     
@@ -128,17 +135,82 @@ struct StackCardView: View {
             let size = proxy.size
             let index = viewModel.getIndex(movie: movie)
             let topOffset = (index <= 3 ? index : 2) * 15
-            ZStack{
+            
+            ZStack {
                 let url = URL(string: ApiRoutes.imageURL(posterPath: movie.posterPath ?? ""))
-                WebImage(url: url)
-                    .resizable()
-                    .shadow(radius: 50)
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: size.width - CGFloat(topOffset), height: size.height)
-                    .cornerRadius(15)
-                    .offset(y: -CGFloat(topOffset))
                 
-            }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                RoundedRectangle(cornerRadius: 15)
+                    .frame(width: size.width - CGFloat(topOffset), height: size.height + 15)
+                    .foregroundColor(Color(
+                        red: Double((0x303030 & 0xFF0000) >> 16) / 255.0,
+                        green: Double((0x303030 & 0x00FF00) >> 8) / 255.0,
+                        blue: Double(0x303030 & 0x0000FF) / 255.0
+                    ))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 15)
+                            .stroke(Color.white, lineWidth: 2)
+                    )
+                
+                VStack {
+                    WebImage(url: url)
+                        .resizable()
+                        .shadow(radius: 50)
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: size.width - CGFloat(topOffset) - 20, height: size.height - 60)
+                        .cornerRadius(10)
+                        .padding(.top)
+                    Spacer()
+                }
+                
+                
+                VStack(alignment: .leading) {
+                    Spacer()
+                    
+                    Text(movie.title ?? "")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding(.horizontal)
+                        .lineLimit(1)
+                    
+                    HStack {
+                        HStack{
+                            ForEach(0..<5) { index in
+                                Image(systemName: "star.fill")
+                                    .font(.system(size: 10, weight: .bold))
+                                    .foregroundColor(index <= Int((movie.voteAverage ?? 0) / 2) ? .yellow : .gray)
+                                    .shadow(radius: 5)
+                            }
+                            
+                            Text(String(movie.voteAverage ?? 0))
+                                .font(.system(size: 13))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                        }
+                        
+                        Spacer()
+                        
+                        HStack{
+                            Image(systemName: "calendar.badge.clock")
+                                .font(.system(size: 13, weight: .bold))
+                                .foregroundColor(.gray)
+                                .shadow(radius: 5)
+                            
+                            Text(movie.releaseDate ?? "N/A")
+                                .font(.system(size: 14))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                        }
+                    }.padding(.horizontal)
+                        .padding(.bottom, 2)
+                    
+                }
+                .frame(maxWidth: .infinity, alignment: .bottom)
+                .padding(.bottom, 5)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            .offset(y: -CGFloat(topOffset))
+            
             
         }.contentShape(Rectangle().trim(from: 0, to: endSwipe ? 0 : 1))
             .offset(x: offset)

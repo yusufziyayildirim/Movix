@@ -18,6 +18,7 @@ class DiscoverViewModel: ObservableObject{
     
     init(service: MovieServiceProtocol){
         self.service = service
+        getDiscoverMovies()
     }
     
     func getIndex(movie: Movie) -> Int{
