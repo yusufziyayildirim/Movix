@@ -15,5 +15,16 @@ class MovieMockDataService: MovieServiceProtocol{
         //Mock Movie data
     }
     
+    func getMovieDetail(id: Int, completion: @escaping ((Movie?) -> ())) {
+        //Mock Movie detial
+    }
+    
+    func getMovieVideoId(id: Int, completion: @escaping ((MovieTrailerKey?) -> ())){
+        //Mock video ID
+    }
+    
+    func searchMovie(query: String, page: Int, completion: @escaping ((MovieApiResponse?) -> ())) {
+        //Mock search movie
+    }
 }
 
