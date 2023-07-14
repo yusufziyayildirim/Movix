@@ -9,6 +9,7 @@ import Foundation
 
 final class HomeViewModel{
     let service: MovieServiceProtocol?
+    weak var delegate: HomeViewModelDelegate?
     
     var isLoadingData: Observable<Bool> = Observable(false)
     var headerPosters: Observable<[Movie]> = Observable(nil)
@@ -34,7 +35,7 @@ final class HomeViewModel{
                 guard let returnedMovies = result else { return }
                 
                 self.sectionList[index].movies.append(contentsOf: returnedMovies.results ?? [])
-                
+                delegate?.reloadTableView()
                 getHeaderPosters(index: index)
             })
         }
