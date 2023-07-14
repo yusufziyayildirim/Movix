@@ -10,6 +10,7 @@ import Foundation
 class DiscoverViewModel: ObservableObject{
     
     let service: MovieServiceProtocol?
+    weak var delegate: DiscoverViewModelDelegate?
     
     @Published var fetchedMovies: [Movie] = []
     @Published var removedMovies = [Movie]()
@@ -42,6 +43,10 @@ class DiscoverViewModel: ObservableObject{
             
             self.page += 1
         })
+    }
+    
+    func navigateToDetailScreen(with id: Int){
+        delegate?.navigateToDetailScreen(with: id)
     }
     
 }
