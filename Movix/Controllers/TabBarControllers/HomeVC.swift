@@ -16,7 +16,7 @@ class HomeVC: UIViewController {
     
     @IBOutlet weak var homeTableView: UITableView!
     
-    let cell = HomeTableViewCell()
+    let cell = MovieCollectionTableViewCell()
     let viewModel = HomeViewModel(service: MovieService())
     
     override func viewDidLoad() {
@@ -99,7 +99,7 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let homeTableViewCell = tableView.dequeueReusableCell(withIdentifier: cell.id, for: indexPath) as? HomeTableViewCell else {
+        guard let homeTableViewCell = tableView.dequeueReusableCell(withIdentifier: cell.id, for: indexPath) as? MovieCollectionTableViewCell else {
             return UITableViewCell()
         }
         homeTableViewCell.delegate = self
@@ -117,7 +117,7 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
 }
 
 //Mark HomeTableViewCellDelegate
-extension HomeVC: HomeTableViewCellDelegate {
+extension HomeVC: MovieCollectionTableViewCellDelegate {
     func seeAllButtonTapped(row: Int) {
         navigateToSeeAllScreen(row: row)
     }

@@ -8,20 +8,20 @@
 import UIKit
 import SDWebImage
 
-protocol HomeTableViewCellDelegate: AnyObject {
+protocol MovieCollectionTableViewCellDelegate: AnyObject {
     func seeAllButtonTapped(row: Int)
     func didSelectItem(movieId: Int)
 }
 
-class HomeTableViewCell: UITableViewCell {
+class MovieCollectionTableViewCell: UITableViewCell {
     
     @IBOutlet weak var tableViewCellTitle: UILabel!
     @IBOutlet weak var movieCollectionView: UICollectionView!
     
-    weak var delegate: HomeTableViewCellDelegate?
+    weak var delegate: MovieCollectionTableViewCellDelegate?
     
-    public let id = "homeTableViewCell"
-    public let nib = UINib(nibName: "HomeTableViewCell", bundle: nil)
+    public let id = "movieCollectionTableViewCell"
+    public let nib = UINib(nibName: "MovieCollectionTableViewCell", bundle: nil)
     
     private var movies = [Movie]()
     private let cell = MovieCollectionViewCell()
@@ -50,7 +50,7 @@ class HomeTableViewCell: UITableViewCell {
 
 
 //MARK CollectionView delegate and datasource
-extension HomeTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource {
+extension MovieCollectionTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         movies.count
     }
@@ -84,21 +84,21 @@ extension HomeTableViewCell: UICollectionViewDelegate, UICollectionViewDataSourc
                     //Tapped the button
                 }
                 
-                let watchAction = UIAction(title: "Add to watchlist", image: UIImage(systemName: "bookmark")) { _ in
+                let watchlistAction = UIAction(title: "Add to watchlist", image: UIImage(systemName: "bookmark")) { _ in
                     guard let _ = self else {
                         return
                     }
                     //Tapped the button
                 }
                 
-                let watchedAction = UIAction(title: "Add to watch history", image: UIImage(systemName: "checkmark.seal")) { _ in
+                let historyAction = UIAction(title: "Add to watch history", image: UIImage(systemName: "checkmark.seal")) { _ in
                     guard let _ = self else {
                         return
                     }
                     //Tapped the button
                 }
                 
-                return UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [favoriteAction, watchAction, watchedAction])
+                return UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [favoriteAction, watchlistAction, historyAction])
                 
             }
         return config

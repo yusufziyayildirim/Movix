@@ -35,7 +35,7 @@ class MovieDetailVC: UIViewController{
     
     var player: YTPlayerView!
     
-    private let cell = HomeTableViewCell()
+    private let cell = MovieCollectionTableViewCell()
     
     var movieId = Int()
     let viewModel = MovieDetailViewModel(service: MovieService())
@@ -155,7 +155,7 @@ extension MovieDetailVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let homeTableViewCell = tableView.dequeueReusableCell(withIdentifier: cell.id, for: indexPath) as? HomeTableViewCell else {
+        guard let homeTableViewCell = tableView.dequeueReusableCell(withIdentifier: cell.id, for: indexPath) as? MovieCollectionTableViewCell else {
             return UITableViewCell()
         }
         homeTableViewCell.delegate = self
@@ -172,7 +172,7 @@ extension MovieDetailVC: UITableViewDelegate, UITableViewDataSource {
 }
 
 //Mark HomeTableViewCellDelegate
-extension MovieDetailVC: HomeTableViewCellDelegate {
+extension MovieDetailVC: MovieCollectionTableViewCellDelegate {
     func seeAllButtonTapped(row: Int) {
         navigateToSeeAllScreen(row: row)
     }
