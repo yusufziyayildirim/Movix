@@ -9,7 +9,6 @@ import UIKit
 
 class MovieTableViewCell: UITableViewCell {
     
-    
     @IBOutlet weak var movieImg: UIImageView!
     @IBOutlet weak var movieTitle: UILabel!
     @IBOutlet weak var runtime: UILabel!
@@ -40,7 +39,22 @@ class MovieTableViewCell: UITableViewCell {
         self.movieTitle.text = movie.title
         self.movieImg.sd_setImage(with: URL(string: ApiRoutes.imageURL(posterPath: movie.posterPath ?? "")), placeholderImage: UIImage(named: "mainImg"))
         self.runtime.text = movie.runtime != nil ? String(movie.runtime!) : "N/A"
-        self.releaseDate.text = movie.releaseDate
+        
+        if let releaseDate = movie.releaseDate {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            if let date = dateFormatter.date(from: releaseDate) {
+                let formattedDateFormatter = DateFormatter()
+                formattedDateFormatter.dateFormat = "MM/dd/yyyy"
+                let formattedDate = formattedDateFormatter.string(from: date)
+                self.releaseDate.text = formattedDate
+            } else {
+                self.releaseDate.text = "N/A"
+            }
+        } else {
+            self.releaseDate.text = "N/A"
+        }
+        
         let voteAverage = movie.voteAverage ?? 0
         self.voteAverage.text = String(format: "%.1f", voteAverage)
         
