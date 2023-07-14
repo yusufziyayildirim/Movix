@@ -28,7 +28,6 @@ class SeeAllVC: UIViewController {
     func configureMovieTableView() {
         movieTableView.delegate = self
         movieTableView.dataSource = self
-        movieTableView.allowsSelection = false
         movieTableView.register(cell.nib, forCellReuseIdentifier: cell.id)
         
         
@@ -43,6 +42,13 @@ class SeeAllVC: UIViewController {
             self.movies = movies
             movieTableView.reloadOnMainThread()
         }
+    }
+    
+    func navigateToDetailScreen(with id: Int) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let destinationVC = storyboard.instantiateViewController(withIdentifier: "MovieDetailVC") as! MovieDetailVC
+        destinationVC.movieId = id
+        navigationController?.pushViewController(destinationVC, animated: true)
     }
     
 }
@@ -63,6 +69,10 @@ extension SeeAllVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 150
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        navigateToDetailScreen(with: movies[indexPath.row].id ?? 0)
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

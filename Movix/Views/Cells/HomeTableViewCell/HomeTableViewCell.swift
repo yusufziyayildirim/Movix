@@ -10,7 +10,7 @@ import SDWebImage
 
 protocol HomeTableViewCellDelegate: AnyObject {
     func seeAllButtonTapped(row: Int)
-    func didSelectItem()
+    func didSelectItem(movieId: Int)
 }
 
 class HomeTableViewCell: UITableViewCell {
@@ -65,7 +65,7 @@ extension HomeTableViewCell: UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.didSelectItem()
+        delegate?.didSelectItem(movieId: movies[indexPath.row].id ?? 0)
     }
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -77,21 +77,21 @@ extension HomeTableViewCell: UICollectionViewDelegate, UICollectionViewDataSourc
                 return imagePreviewVC
             }) {[weak self] _ in
                 
-                let favoriteAction = UIAction(title: "Add favorite", image: UIImage(systemName: "star")) { _ in
+                let favoriteAction = UIAction(title: "Add to favorites", image: UIImage(systemName: "star")) { _ in
                     guard let _ = self else {
                         return
                     }
                     //Tapped the button
                 }
                 
-                let watchAction = UIAction(title: "Add watchlist", image: UIImage(systemName: "bookmark")) { _ in
+                let watchAction = UIAction(title: "Add to watchlist", image: UIImage(systemName: "bookmark")) { _ in
                     guard let _ = self else {
                         return
                     }
                     //Tapped the button
                 }
                 
-                let watchedAction = UIAction(title: "Add watchedlist", image: UIImage(systemName: "checkmark.seal")) { _ in
+                let watchedAction = UIAction(title: "Add to watch history", image: UIImage(systemName: "checkmark.seal")) { _ in
                     guard let _ = self else {
                         return
                     }

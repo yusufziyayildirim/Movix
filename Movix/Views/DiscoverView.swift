@@ -9,7 +9,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct DiscoverView: View {
-    @StateObject var viewModel = DiscoverViewModel(service: MovieService())
+    @EnvironmentObject var viewModel: DiscoverViewModel
     @State private var showingProgressView = true
     
     var body: some View {
@@ -159,6 +159,9 @@ struct StackCardView: View {
                         .frame(width: size.width - CGFloat(topOffset) - 20, height: size.height - 60)
                         .cornerRadius(10)
                         .padding(.top)
+                        .onTapGesture {
+                            navigateToDetailScreen()
+                        }
                     Spacer()
                 }
                 
@@ -261,6 +264,12 @@ struct StackCardView: View {
         
         if viewModel.fetchedMovies.count <= 5 && viewModel.shouldDownloadMore {
             viewModel.getDiscoverMovies()
+        }
+    }
+    
+    func navigateToDetailScreen() {
+        if let movieId = movie.id {
+            viewModel.navigateToDetailScreen(with: movieId)
         }
     }
     

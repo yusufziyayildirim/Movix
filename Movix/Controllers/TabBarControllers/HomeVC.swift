@@ -8,6 +8,10 @@
 import UIKit
 import SwiftUI
 
+protocol HomeViewModelDelegate: AnyObject{
+    func reloadTableView()
+}
+
 class HomeVC: UIViewController {
     
     @IBOutlet weak var homeTableView: UITableView!
@@ -19,6 +23,7 @@ class HomeVC: UIViewController {
         super.viewDidLoad()
         configureHomeTableView()
         
+        viewModel.delegate = self
         viewModel.getMovies()
     }
     
@@ -56,7 +61,9 @@ class HomeVC: UIViewController {
                   let movies = movies else {
                 return
             }
-            let carouselView = CarouselView(movies: movies)
+            let carouselView = CarouselView(movies: movies){ movieId in
+                self.navigateToDetailScreen(with: movieId)
+            }
             
             let headerView = UIHostingController(rootView: carouselView)
             headerView.view.frame = .init(x: 0, y: 0, width: view.bounds.width, height: UIScreen.main.bounds.height * 0.5)
@@ -65,21 +72,21 @@ class HomeVC: UIViewController {
     }
     
     func navigateToSeeAllScreen(row: Int) {
-        performSegue(withIdentifier: "toSeeAllVC", sender: row)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let destinationVC = storyboard.instantiateViewController(withIdentifier: "SeeAllVC") as! SeeAllVC
+        destinationVC.url = viewModel.sectionList[row].url
+        destinationVC.pageTitle = viewModel.sectionList[row].title
+        navigationController?.pushViewController(destinationVC, animated: true)
+
     }
     
-    func navigateToDetailScreen() {
-        performSegue(withIdentifier: "toMovieDetailVC", sender: nil)
+    func navigateToDetailScreen(with id: Int) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let destinationVC = storyboard.instantiateViewController(withIdentifier: "MovieDetailVC") as! MovieDetailVC
+        destinationVC.movieId = id
+        navigationController?.pushViewController(destinationVC, animated: true)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toSeeAllVC" {
-            if let destinationVC = segue.destination as? SeeAllVC, let row = sender as? Int{
-                destinationVC.url = viewModel.sectionList[row].url
-                destinationVC.pageTitle = viewModel.sectionList[row].title
-            }
-        }
-    }
 }
 
 
@@ -115,7 +122,14 @@ extension HomeVC: HomeTableViewCellDelegate {
         navigateToSeeAllScreen(row: row)
     }
     
-    func didSelectItem() {
-        navigateToDetailScreen()
+    func didSelectItem(movieId: Int) {
+        navigateToDetailScreen(with: movieId)
+    }
+}
+
+
+extension HomeVC: HomeViewModelDelegate {
+    func reloadTableView(){
+        homeTableView.reloadOnMainThread()
     }
 }

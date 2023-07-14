@@ -10,11 +10,13 @@ import SDWebImageSwiftUI
 
 struct CarouselView: View {
     let movies: [Movie]
+    let onTap: (Int) -> Void
     
-    init(movies: [Movie]) {
+    init(movies: [Movie], onTap: @escaping (Int) -> Void) {
         self.movies = movies
+        self.onTap = onTap
     }
-
+    
     @State private var activeIndex = 0
     @State private var dragOffset: CGFloat = 0
     @State private var isAnimatedOffset = false
@@ -35,6 +37,9 @@ struct CarouselView: View {
                                 .scaleEffect(getScale(index: index))
                                 .opacity(getOpacity(index: index))
                                 .shadow(color: Color(.black).opacity(0.8), radius: 5, x: 0, y: 0)
+                                .onTapGesture {
+                                    onTap(movie.id ?? 0)
+                                }
                         }
                     }
                     .gesture(
@@ -90,17 +95,3 @@ struct CarouselView: View {
         return opacity
     }
 }
-
-
-struct CarouselView_Previews: PreviewProvider {
-   
-    static var previews: some View {
-        let movies: [Movie] = [
-            Movie(id: 2, overview: "", posterPath: "9n2tJBplPbgR2ca05hS5CKXwP2c.jpg", releaseDate: "", title: "", voteAverage: 7.5 , runtime: 44, genres: [Genre(id: 1, name: "")]),
-            Movie(id: 3, overview: "", posterPath: "9n2tJBplPbgR2ca05hS5CKXwP2c.jpg", releaseDate: "", title: "", voteAverage: 7.5 , runtime: 44, genres: [Genre(id: 1, name: "")])
-        ]
-        
-        CarouselView(movies: movies)
-    }
-}
-
