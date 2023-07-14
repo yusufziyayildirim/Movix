@@ -9,10 +9,10 @@ import Foundation
 
 enum ApiRoutes {
     
-    private static var laravelBaseUrl = "https://movixapi.innovaticacode.com/api"
-    private static var tmdbBaseUrl = "https://api.themoviedb.org"
-    static var tmdbApiKey = "b02965feff84b8f3e6d7fb314f02919d"
-    
+    private static let laravelBaseUrl = "https://movixapi.innovaticacode.com/api"
+    private static let tmdbBaseUrl = "https://api.themoviedb.org"
+    static let tmdbApiKey = "b02965feff84b8f3e6d7fb314f02919d"
+     
     //LARAVEL API URLs
     static func signUp() -> String {
         "\(laravelBaseUrl)/register"
@@ -68,6 +68,23 @@ enum ApiRoutes {
     }
     
     static func movieDetail(id: Int) -> String {
-        "\(tmdbBaseUrl)/3/movie/\(id)?api_key=\(tmdbApiKey)&language=en-US"
+        "\(tmdbBaseUrl)/3/movie/\(id)"
     }
+    
+    static func similarMovies(id: Int) -> String {
+        "\(tmdbBaseUrl)/3/movie/\(id)/similar"
+    }
+    
+    static func recommendations(id: Int) -> String {
+        "\(tmdbBaseUrl)/3/movie/\(id)/recommendations"
+    }
+    
+    static func getMovieVideoId(id: Int) -> String {
+        "\(tmdbBaseUrl)/3/movie/\(id)/videos"
+    }
+
+    static func searchMovie() -> String {
+        "\(tmdbBaseUrl)/3/search/movie"
+    }
+
 }
