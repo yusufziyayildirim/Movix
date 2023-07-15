@@ -12,6 +12,10 @@ struct DiscoverView: View {
     @EnvironmentObject var viewModel: DiscoverViewModel
     @State private var showingProgressView = true
     
+    @State private var favoritesBtnImg = ""
+    @State private var watchlistBtnImg = ""
+    @State private var watchedlistBtnImg = ""
+    
     var body: some View {
         VStack{
             if showingProgressView {
@@ -26,7 +30,7 @@ struct DiscoverView: View {
                             .foregroundColor(.gray)
                     } else{
                         ForEach(viewModel.fetchedMovies.reversed()) { movie in
-                            StackCardView(movie: movie)
+                            StackCardView(movie: movie, toggleFavoritesBtnImg: toggleFavoritesBtnImg, toggleWatchlistBtnImg: toggleWatchlistBtnImg, toggleWatchedlistBtnImg: toggleWatchedlistBtnImg)
                                 .environmentObject(viewModel)
                         }
                     }
@@ -51,40 +55,58 @@ struct DiscoverView: View {
                         .opacity((viewModel.removedMovies.isEmpty) ? 0.6 : 1)
                     
                     HStack{
-                        Button{
-                            
-                        } label: {
-                            Image(systemName: "bookmark")
-                                .font(.system(size: 15, weight: .bold))
-                                .foregroundColor(.white)
-                                .shadow(radius: 5)
-                                .padding(13)
-                                .background(.green)
-                                .clipShape(Circle())
-                        }
                         
                         Button{
-                            
+                            viewModel.performAction(status: .favoriteMovies)
+                            toggleFavoritesBtnImg()
                         } label: {
-                            Image(systemName: "star")
+                            Image(systemName: favoritesBtnImg)
                                 .font(.system(size: 15, weight: .bold))
                                 .foregroundColor(.white)
                                 .shadow(radius: 5)
                                 .padding(13)
                                 .background(.yellow)
                                 .clipShape(Circle())
+                        }.onAppear {
+                            DispatchQueue.main.async {
+                                toggleFavoritesBtnImg()
+                            }
                         }
                         
                         Button{
-                            
+                            viewModel.performAction(status: .watchlist)
+                            toggleWatchlistBtnImg()
                         } label: {
-                            Image(systemName: "checkmark.seal")
+                            Image(systemName: watchlistBtnImg)
+                                .font(.system(size: 15, weight: .bold))
+                                .foregroundColor(.white)
+                                .shadow(radius: 5)
+                                .padding(13)
+                                .background(.green)
+                                .clipShape(Circle())
+                        }.onAppear {
+                            DispatchQueue.main.async {
+                                toggleWatchlistBtnImg()
+                            }
+                        }
+                        
+                        
+                        Button{
+                            viewModel.performAction(status: .watchHistory)
+                            toggleWatchedlistBtnImg()
+                        } label: {
+                            Image(systemName: watchedlistBtnImg)
                                 .font(.system(size: 15, weight: .bold))
                                 .foregroundColor(.white)
                                 .shadow(radius: 5)
                                 .padding(13)
                                 .background(.red)
                                 .clipShape(Circle())
+                        }
+                        .onAppear {
+                            DispatchQueue.main.async {
+                                toggleWatchedlistBtnImg()
+                            }
                         }
                     }
                     .disabled(viewModel.fetchedMovies.isEmpty)
@@ -103,14 +125,28 @@ struct DiscoverView: View {
     func getPrevious() {
         guard !viewModel.removedMovies.isEmpty else { return }
         
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
             withAnimation {
                 viewModel.fetchedMovies.insert(viewModel.removedMovies[viewModel.removedMovies.count - 1], at: 0)
             }
             viewModel.removedMovies.removeLast()
+            toggleFavoritesBtnImg()
+            toggleWatchlistBtnImg()
+            toggleWatchedlistBtnImg()
         }
-        
-        
+    }
+    
+    func toggleFavoritesBtnImg() {
+        favoritesBtnImg = viewModel.isMovieInStatus(status: .favoriteMovies) ? "star.fill" : "star"
+    }
+    
+    func toggleWatchlistBtnImg() {
+        watchlistBtnImg = viewModel.isMovieInStatus(status: .watchlist) ? "bookmark.fill" : "bookmark"
+    }
+    
+    func toggleWatchedlistBtnImg() {
+        watchedlistBtnImg = viewModel.isMovieInStatus(status: .watchHistory) ? "checkmark.seal.fill" : "checkmark.seal"
     }
 }
 
@@ -125,9 +161,25 @@ struct StackCardView: View {
     @EnvironmentObject var viewModel: DiscoverViewModel
     var movie: Movie
     
+    var toggleFavoritesBtnImg: () -> Void
+    var toggleWatchlistBtnImg: () -> Void
+    var toggleWatchedlistBtnImg: () -> Void
+    
     @State var offset = CGFloat(0)
     @GestureState var isDragging = false
     @State var endSwipe = false
+    
+    var favoriteButtonViewModel: MovieActionButtonViewModel {
+          MovieActionButtonViewModel(movie: movie, status: .favoriteMovies, imageName: "star")
+    }
+      
+    var watchlistButtonViewModel: MovieActionButtonViewModel {
+          MovieActionButtonViewModel(movie: movie, status: .watchlist, imageName: "bookmark")
+    }
+      
+    var historyButtonViewModel: MovieActionButtonViewModel {
+          MovieActionButtonViewModel(movie: movie, status: .watchHistory, imageName: "checkmark.seal")
+    }
     
     var body: some View {
         
@@ -260,6 +312,11 @@ struct StackCardView: View {
                     viewModel.removedMovies.append(removedMovie)
                 }
             }
+            
+            toggleFavoritesBtnImg()
+            toggleWatchlistBtnImg()
+            toggleWatchedlistBtnImg()
+                    
         }
         
         if viewModel.fetchedMovies.count <= 5 && viewModel.shouldDownloadMore {

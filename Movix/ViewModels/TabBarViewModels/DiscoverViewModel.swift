@@ -49,4 +49,30 @@ class DiscoverViewModel: ObservableObject{
         delegate?.navigateToDetailScreen(with: id)
     }
     
+    func isMovieInStatus(status: MovieStatus) -> Bool {
+        do {
+            let movies = try CoreDataManager.shared.fetchMovies(withStatus: status)
+            return movies.contains { $0.id == fetchedMovies[0].id }
+            
+        } catch {
+            print("Failed to perform action: \(error)")
+        }
+        
+        return false
+    }
+
+    func performAction(status: MovieStatus) {
+        do {
+            let isMovieInStatus = isMovieInStatus(status: status)
+            
+            if isMovieInStatus {
+                try CoreDataManager.shared.removeMovie(movie: fetchedMovies[0], status: status)
+            } else {
+                try CoreDataManager.shared.addMovie(movie: fetchedMovies[0], status: status)
+            }
+        } catch {
+            print("Failed to perform action for movie : \(error)")
+        }
+    }
+    
 }
