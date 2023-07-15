@@ -84,4 +84,37 @@ extension SeeAllVC: UITableViewDelegate, UITableViewDataSource {
             viewModel.getMovies(url: url)
         }
     }
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let selectedMovie = self.movies[indexPath.row]
+        
+        let config = UIContextMenuConfiguration(
+            identifier: nil,
+            previewProvider: { () -> UIViewController? in
+                let imagePreviewVC = ImagePreviewVC(posterPath: selectedMovie.posterPath ?? "")
+                return imagePreviewVC
+            }) { _ in
+                
+                let favoriteButtonViewModel = MovieActionButtonViewModel(movie: selectedMovie, status: .favoriteMovies, imageName: "star")
+                let watchlistButtonViewModel = MovieActionButtonViewModel(movie: selectedMovie, status: .watchlist, imageName: "bookmark")
+                let historyButtonViewModel = MovieActionButtonViewModel(movie: selectedMovie, status: .watchHistory, imageName: "checkmark.seal")
+
+                let favoriteAction = UIAction(title: favoriteButtonViewModel.buttonTitle, image: favoriteButtonViewModel.buttonImage) { _ in
+                    favoriteButtonViewModel.performAction()
+                }
+
+                let watchlistAction = UIAction(title: watchlistButtonViewModel.buttonTitle, image: watchlistButtonViewModel.buttonImage) { _ in
+                    watchlistButtonViewModel.performAction()
+                }
+
+                let historyAction = UIAction(title: historyButtonViewModel.buttonTitle, image: historyButtonViewModel.buttonImage) { _ in
+                    historyButtonViewModel.performAction()
+                }
+
+                return UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [favoriteAction, watchlistAction, historyAction])
+                
+            }
+        return config
+
+    }
 }

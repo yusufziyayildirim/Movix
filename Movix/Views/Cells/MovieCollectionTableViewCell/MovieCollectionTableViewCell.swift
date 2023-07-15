@@ -69,67 +69,35 @@ extension MovieCollectionTableViewCell: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let selectedMovie = self.movies[indexPath.row]
         
         let config = UIContextMenuConfiguration(
             identifier: nil,
             previewProvider: { () -> UIViewController? in
-                let imagePreviewVC = ImagePreviewViewController(posterPath: self.movies[indexPath.row].posterPath ?? "")
+                let imagePreviewVC = ImagePreviewVC(posterPath: selectedMovie.posterPath ?? "")
                 return imagePreviewVC
-            }) {[weak self] _ in
+            }) { _ in
                 
-                let favoriteAction = UIAction(title: "Add to favorites", image: UIImage(systemName: "star")) { _ in
-                    guard let _ = self else {
-                        return
-                    }
-                    //Tapped the button
+                let favoriteButtonViewModel = MovieActionButtonViewModel(movie: selectedMovie, status: .favoriteMovies, imageName: "star")
+                let watchlistButtonViewModel = MovieActionButtonViewModel(movie: selectedMovie, status: .watchlist, imageName: "bookmark")
+                let historyButtonViewModel = MovieActionButtonViewModel(movie: selectedMovie, status: .watchHistory, imageName: "checkmark.seal")
+
+                let favoriteAction = UIAction(title: favoriteButtonViewModel.buttonTitle, image: favoriteButtonViewModel.buttonImage) { _ in
+                    favoriteButtonViewModel.performAction()
                 }
-                
-                let watchlistAction = UIAction(title: "Add to watchlist", image: UIImage(systemName: "bookmark")) { _ in
-                    guard let _ = self else {
-                        return
-                    }
-                    //Tapped the button
+
+                let watchlistAction = UIAction(title: watchlistButtonViewModel.buttonTitle, image: watchlistButtonViewModel.buttonImage) { _ in
+                    watchlistButtonViewModel.performAction()
                 }
-                
-                let historyAction = UIAction(title: "Add to watch history", image: UIImage(systemName: "checkmark.seal")) { _ in
-                    guard let _ = self else {
-                        return
-                    }
-                    //Tapped the button
+
+                let historyAction = UIAction(title: historyButtonViewModel.buttonTitle, image: historyButtonViewModel.buttonImage) { _ in
+                    historyButtonViewModel.performAction()
                 }
-                
+
                 return UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [favoriteAction, watchlistAction, historyAction])
                 
             }
         return config
         
-    }
-}
-
-
-private class ImagePreviewViewController: UIViewController {
-    
-    private let imageView = UIImageView()
-    private let posterPath: String?
-    
-    init(posterPath: String) {
-        self.posterPath = posterPath
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.imageView.sd_setImage(with: URL(string: ApiRoutes.imageURL(posterPath: posterPath ?? "")), placeholderImage: UIImage(named: "mainImg"))
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFill
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(imageView)
-        
-        imageView.pinToEdgesOf(view: view)
     }
 }
