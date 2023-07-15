@@ -74,7 +74,7 @@
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
-                        <color key="backgroundColor" red="0.96470588235294119" green="0.96470588235294119" blue="0.96470588235294119" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Y9q-pw-hoC" firstAttribute="top" secondItem="kJx-VF-3xS" secondAttribute="bottom" constant="30" id="A3w-nB-S9R"/>
                             <constraint firstItem="iGZ-qD-ZhZ" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="25" id="Afu-0f-Aie"/>
@@ -126,6 +126,7 @@
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hca-T4-Nf3">
                                 <rect key="frame" x="25" y="268.33333333333331" width="343" height="50"/>
+                                <color key="tintColor" systemColor="labelColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="Tzc-yF-8W0"/>
                                 </constraints>
@@ -177,7 +178,8 @@
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="mR3-O7-Mj9"/>
-                        <color key="backgroundColor" red="0.96470588235294119" green="0.96470588235294119" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
+                        <color key="tintColor" systemColor="systemGroupedBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="1rY-N0-Yuk" firstAttribute="top" secondItem="sb0-Je-jRa" secondAttribute="bottom" constant="20" id="5Gf-yc-Ilh"/>
                             <constraint firstItem="1rY-N0-Yuk" firstAttribute="centerX" secondItem="0RU-sp-dV0" secondAttribute="centerX" id="6B5-Zn-tK5"/>
@@ -239,6 +241,7 @@
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zb4-hk-xNm">
                                 <rect key="frame" x="25" y="268.33333333333331" width="343" height="50"/>
+                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="fwh-RW-7yk"/>
                                 </constraints>
@@ -247,6 +250,7 @@
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UI9-h1-oFu" customClass="PasswordTextField" customModule="Movix" customModuleProvider="target">
                                 <rect key="frame" x="25" y="338.33333333333331" width="343" height="50"/>
+                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="2y0-b2-OTa"/>
                                     <constraint firstAttribute="height" constant="50" id="OfK-VS-J41"/>
@@ -296,7 +300,7 @@
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="erO-3j-VKI"/>
-                        <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="erO-3j-VKI" firstAttribute="trailing" secondItem="zb4-hk-xNm" secondAttribute="trailing" constant="25" id="1dc-q6-a3a"/>
                             <constraint firstItem="3ZF-nX-SiX" firstAttribute="top" secondItem="erO-3j-VKI" secondAttribute="top" constant="30" id="2mf-Vb-8Yh"/>
@@ -377,7 +381,7 @@
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="oJe-YV-oz7"/>
-                        <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="eK6-ic-ZhA" firstAttribute="top" secondItem="oJe-YV-oz7" secondAttribute="top" constant="30" id="MKH-sb-fmq"/>
                             <constraint firstItem="6hC-3B-apW" firstAttribute="top" secondItem="eK6-ic-ZhA" secondAttribute="bottom" constant="20" id="Pd7-sF-hw1"/>
@@ -446,6 +450,7 @@
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9rt-aK-JRo">
                                 <rect key="frame" x="25" y="268.33333333333331" width="343" height="50"/>
+                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="ecK-k4-dWb"/>
                                 </constraints>
@@ -467,7 +472,7 @@
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="70l-40-jXO"/>
-                        <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="9rt-aK-JRo" firstAttribute="top" secondItem="lsz-IS-FNX" secondAttribute="bottom" constant="40" id="0yM-gP-0gH"/>
                             <constraint firstItem="70l-40-jXO" firstAttribute="trailing" secondItem="MSh-uv-b3U" secondAttribute="trailing" constant="25" id="4YG-BL-3rS"/>
@@ -495,8 +500,17 @@
     </scenes>
     <resources>
         <image name="mainImg" width="870" height="1160"/>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemGray2Color">
             <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGroupedBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
