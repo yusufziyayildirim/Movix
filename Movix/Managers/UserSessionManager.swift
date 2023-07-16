@@ -19,20 +19,15 @@ class UserSessionManager {
     
     func setAllData(token: String?, userName: String?, userEmail: String?, userImageUrl: String?){
         self.bearerToken = token
-        self.userName = userName
         self.userEmail = userEmail
-        if let imageUrl = userImageUrl{
-            guard let url = URL(string: imageUrl) else {
-                return
-            }
-            self.userImageUrl = url
-        }
+        
+        setNameAndImg(userName: userName, userImageUrl: userImageUrl)
     }
     
     func setNameAndImg(userName: String?,  userImageUrl: String?){
         self.userName = userName
-        if let imageUrl = userImageUrl{
-            guard let url = URL(string: imageUrl) else {
+        if let imageUrl = userImageUrl, !imageUrl.isEmpty{
+            guard let url = URL(string: "\(ApiRoutes.laravelBaseUrl)/storage/\(imageUrl)") else {
                 return
             }
             self.userImageUrl = url
@@ -40,7 +35,15 @@ class UserSessionManager {
     }
     
     func getUsername() -> String? {
-        return userName
+        guard let username = userName else {
+            return nil
+        }
+        
+        let components = username.components(separatedBy: " ")
+        let capitalizedComponents = components.map { $0.capitalized }
+        let capitalizedUsername = capitalizedComponents.joined(separator: " ")
+        
+        return capitalizedUsername
     }
     
     func getUserImageUrl() -> URL? {
