@@ -104,6 +104,11 @@ class MovieDetailVC: UIViewController{
         startVideo()
     }
     
+    
+    @IBAction func commentsBtnTapped(_ sender: Any) {
+        navigateToMovieCommentsScreen(with: movieId)
+    }
+    
     func startVideo() {
         self.playButton.showLoading()
         self.playButton.setImage(nil, for: .normal)
@@ -134,6 +139,15 @@ class MovieDetailVC: UIViewController{
         destinationVC.movieId = id
         navigationController?.pushViewController(destinationVC, animated: true)
     }
+    
+    
+    func navigateToMovieCommentsScreen(with id: Int) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let destinationVC = storyboard.instantiateViewController(withIdentifier: "MovieCommentsVC") as! MovieCommentsVC
+        destinationVC.movieId = id
+        navigationController?.pushViewController(destinationVC, animated: true)
+    }
+
 }
 
 
@@ -147,10 +161,6 @@ extension MovieDetailVC: UITableViewDelegate, UITableViewDataSource {
         }
         
         return count
-    }
-    
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        300
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
