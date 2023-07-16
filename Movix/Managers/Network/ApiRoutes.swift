@@ -8,34 +8,50 @@
 import Foundation
 
 enum ApiRoutes {
-    
-    private static let laravelBaseUrl = "https://movixapi.innovaticacode.com/api"
+    static let laravelBaseUrl = "https://movixapi.innovaticacode.com"
+    private static let laravelBaseApiUrl = "\(laravelBaseUrl)/api"
     private static let tmdbBaseUrl = "https://api.themoviedb.org"
     static let tmdbApiKey = "b02965feff84b8f3e6d7fb314f02919d"
      
     //LARAVEL API URLs
     static func signUp() -> String {
-        "\(laravelBaseUrl)/register"
+        "\(laravelBaseApiUrl)/register"
     }
     
     static func signIn() -> String {
-        "\(laravelBaseUrl)/login"
+        "\(laravelBaseApiUrl)/login"
     }
     
     static func signOut() -> String {
-        "\(laravelBaseUrl)/logout"
+        "\(laravelBaseApiUrl)/logout"
     }
     
     static func isTokenValid() -> String {
-        "\(laravelBaseUrl)/loggeduser"
+        "\(laravelBaseApiUrl)/loggeduser"
     }
     
     static func forgotPassword() -> String {
-        "\(laravelBaseUrl)/send-reset-password-email"
+        "\(laravelBaseApiUrl)/send-reset-password-email"
     }
     
     static func resendVerifyEmail() -> String {
-        "\(laravelBaseUrl)/email/verification-notification"
+        "\(laravelBaseApiUrl)/email/verification-notification"
+    }
+    
+    static func changePassword() -> String {
+        "\(laravelBaseApiUrl)/update/password"
+    }
+    
+    static func editProfile() -> String {
+        "\(laravelBaseApiUrl)/update/profile"
+    }
+    
+    static func addMovieComment() -> String {
+        "\(laravelBaseApiUrl)/movie/comment/add"
+    }
+    
+    static func getMovieComments(id: Int) -> String {
+        "\(laravelBaseApiUrl)/movie/\(id)/comments"
     }
     
     //TMDB API URLs
