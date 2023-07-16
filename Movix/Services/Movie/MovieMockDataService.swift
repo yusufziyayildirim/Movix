@@ -26,5 +26,15 @@ class MovieMockDataService: MovieServiceProtocol{
     func searchMovie(query: String, page: Int, completion: @escaping ((MovieApiResponse?) -> ())) {
         //Mock search movie
     }
+    
+    func getMovieComments(id: Int, completion: @escaping (([MovieComment]?) -> ())) {
+        //Mock movie comments
+    }
+    
+    func addMovieComment(id: Int, comment: String, completion: @escaping (Result<LaravelApiResponse<MovieComment>, Error>) -> ()) {
+        //Mock add moive comment
+    }
+
+    
 }
 
