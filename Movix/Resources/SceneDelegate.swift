@@ -15,12 +15,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let authStoryboard = UIStoryboard(name: "Auth", bundle: nil)
         let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
         
-        let token: String
+        var token = ""
         do {
             token = try TokenManager.shared.getBearerTokenFromKeychain()
         } catch {
             print(error.localizedDescription)
-            return
         }
         
         
