@@ -99,4 +99,55 @@ class AuthService: AuthServiceProtocol {
             }
         }
     }
+    
+    func changePassword(oldPassword: String, newPassword: String, newPasswordConfirm: String, completion: @escaping (Result<LaravelApiResponse<String>, Error>) -> ()) {
+        let queryParams = ["password" : oldPassword, "new_password" : newPassword, "new_password_confirmation": newPasswordConfirm]
+        guard let token = UserSessionManager.shared.getBearerToken() else { return }
+        let headers = ["Authorization" : "Bearer \(token)"]
+        
+        let changePasswordRequest = ApiRequest(url: ApiRoutes.changePassword(), method: .POST, headers: headers, queryParams: queryParams, body: nil)
+        manager?.request(changePasswordRequest) { (result: Result<LaravelApiResponse<String>, Error>) in
+            switch result {
+            case .success(let response):
+                completion(.success(response))
+            case .failure(_):
+                completion(.failure(AppError.custom("changePasswordError")))
+            }
+        }
+    }
+    
+    func editProfile(name: String, image: Data?, completion: @escaping (Result<LaravelApiResponse<User>, Error>) -> ()) {
+        
+        guard let token = UserSessionManager.shared.getBearerToken() else { return }
+        var headers = ["Authorization": "Bearer \(token)"]
+        var bodyData = Data()
+        
+        if let imageData = image {
+            let boundary = "Boundary-\(UUID().uuidString)"
+            let boundaryPrefix = "--\(boundary)\r\n"
+            let boundarySuffix = "--\(boundary)--\r\n"
+            
+            bodyData.append(Data(boundaryPrefix.utf8))
+            bodyData.append(Data("Content-Disposition: form-data; name=\"img\"; filename=\"image.jpg\"\r\n".utf8))
+            bodyData.append(Data("Content-Type: image/jpeg\r\n\r\n".utf8))
+            bodyData.append(imageData)
+            bodyData.append(Data("\r\n".utf8))
+            bodyData.append(Data(boundarySuffix.utf8))
+            
+            headers["Content-Type"] = "multipart/form-data; boundary=\(boundary)"
+        }
+        
+        
+        let editProfileRequest = ApiRequest(url: ApiRoutes.editProfile(), method: .POST, headers: headers, queryParams: ["name" : name], body: bodyData)
+        manager?.request(editProfileRequest) { (result: Result<LaravelApiResponse<User>, Error>) in
+            switch result {
+            case .success(let response):
+                UserSessionManager.shared.setNameAndImg(userName: name, userImageUrl: response.data?.imageUrl)
+                completion(.success(response))
+            case .failure(_):
+                completion(.failure(AppError.custom("changePasswordError")))
+            }
+        }
+    }
+    
 }

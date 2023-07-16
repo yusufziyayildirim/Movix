@@ -33,4 +33,13 @@ class AuthMockDataService: AuthServiceProtocol{
         // Mock Resend Verify Email
     }
     
+    func changePassword(oldPassword: String, newPassword password: String, newPasswordConfirm passwordConfrim: String, completion: @escaping (Result<LaravelApiResponse<String>, Error>) -> ()) {
+        // Mock Change password
+    }
+    
+    func editProfile(name: String, image: Data?, completion: @escaping (Result<LaravelApiResponse<User>, Error>) -> ()) {
+        // Mock edit profile
+    }
+    
+    
 }

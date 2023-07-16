@@ -14,4 +14,6 @@ protocol AuthServiceProtocol {
     func isTokenValid(token: String, completion: @escaping (Bool) -> ())
     func forgotPassword(email: String, completion: @escaping (Result<LaravelApiResponse<String>, Error>) -> ())
     func resendVerifyEmail(email: String, completion: @escaping (Result<LaravelApiResponse<String>, Error>) -> ())
+    func changePassword(oldPassword: String, newPassword: String, newPasswordConfirm: String, completion: @escaping (Result<LaravelApiResponse<String>, Error>) -> ())
+    func editProfile(name: String, image: Data?, completion: @escaping (Result<LaravelApiResponse<User>, Error>) -> ())
 }
