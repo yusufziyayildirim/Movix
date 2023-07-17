@@ -41,6 +41,8 @@ class MovieDetailVC: UIViewController{
     let viewModel = MovieDetailViewModel(service: MovieService())
     
     
+    var menuButton = UIBarButtonItem(title: nil, image: UIImage(systemName: "ellipsis"), primaryAction: nil, menu: nil)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureLoadingView()
@@ -50,6 +52,8 @@ class MovieDetailVC: UIViewController{
         
         viewModel.delegate = self
         viewModel.getMovieDetail(id: movieId)
+        
+        navigationItem.rightBarButtonItem = menuButton
     }
     
     func configureUI() {
@@ -66,7 +70,7 @@ class MovieDetailVC: UIViewController{
     
     func configureLoadingView() {
         loadingView = UIView(frame: view.bounds)
-        loadingView?.backgroundColor = .white
+        loadingView?.backgroundColor = UIColor.systemBackground
         loadingView?.alpha = 1
 
         activityIndicator = UIActivityIndicatorView()
@@ -82,6 +86,10 @@ class MovieDetailVC: UIViewController{
     func changeLoadingViewState(isHidden: Bool) {
         DispatchQueue.main.async {
             self.loadingView?.isHidden = isHidden
+        }
+        
+        if isHidden {
+            menuButton.menu = createMenu()
         }
     }
     
@@ -147,7 +155,41 @@ class MovieDetailVC: UIViewController{
         destinationVC.movieId = id
         navigationController?.pushViewController(destinationVC, animated: true)
     }
+    
+    @discardableResult
+    func createMenu() -> UIMenu  {
+        if let movie = viewModel.movie {
+            let favoriteButtonViewModel = MovieActionButtonViewModel(movie: movie, status: .favoriteMovies, imageName: "star")
+            let watchlistButtonViewModel = MovieActionButtonViewModel(movie: movie, status: .watchlist, imageName: "bookmark")
+            let historyButtonViewModel = MovieActionButtonViewModel(movie: movie, status: .watchHistory, imageName: "checkmark.seal")
+            
+            let favoriteAction = UIAction(title: favoriteButtonViewModel.buttonTitle, image: favoriteButtonViewModel.buttonImage) { [weak self] _ in
+                favoriteButtonViewModel.performAction()
+                self?.updateMenu()
+            }
+            
+            let watchlistAction = UIAction(title: watchlistButtonViewModel.buttonTitle, image: watchlistButtonViewModel.buttonImage) { [weak self] _ in
+                watchlistButtonViewModel.performAction()
+                self?.updateMenu()
+            }
+            
+            let historyAction = UIAction(title: historyButtonViewModel.buttonTitle, image: historyButtonViewModel.buttonImage) { [weak self] _ in
+                historyButtonViewModel.performAction()
+                self?.updateMenu()
+            }
+            
+            let menu = UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [favoriteAction, watchlistAction, historyAction])
 
+            return menu
+        }
+        return UIMenu()
+    }
+    
+    func updateMenu() {
+        DispatchQueue.main.async {
+            self.navigationItem.rightBarButtonItem?.menu = self.createMenu()
+        }
+    }
 }
 
 
