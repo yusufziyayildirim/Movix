@@ -13,16 +13,18 @@ protocol EditProfileViewModelDelegate: AnyObject{
     func updateIndicator(isLoading: Bool)
 }
 
-class EditProfileVC: UIViewController {
+class EditProfileVC: UIViewController, UINavigationControllerDelegate {
 
-    
+    // MARK: - Outlets
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var saveButton: LoadingButton!
     
+    // MARK: - ViewModel
     let viewModel = EditProfileViewModel(service: AuthService())
     
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,7 +34,7 @@ class EditProfileVC: UIViewController {
         viewModel.delegate = self
     }
     
-
+    // MARK: - Actions
     @IBAction func changePhotoBtnTapped(_ sender: Any) {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
@@ -41,7 +43,7 @@ class EditProfileVC: UIViewController {
     }
     
     @IBAction func saveBtnTapped(_ sender: Any) {
-        let imagedata = userImageView.image?.jpegData(compressionQuality: 0.9)
+        let imagedata = userImageView.image?.jpegData(compressionQuality: 0.3)
         if let nameText = nameTextField.text {
             viewModel.editProfile(name: nameText, image: imagedata)
         } else {
@@ -50,7 +52,8 @@ class EditProfileVC: UIViewController {
         
     }
     
-    func setData() {
+    // MARK: - Private Methods
+    private func setData() {
         if let url = UserSessionManager.shared.getUserImageUrl() {
             userImageView.sd_setImage(with: url)
         } else {
@@ -61,6 +64,7 @@ class EditProfileVC: UIViewController {
     
 }
 
+// MARK: - EditProfile ViewModel Delegate
 extension EditProfileVC: EditProfileViewModelDelegate{
     func message(message: String, isSuccess: Bool = false) {
         DispatchQueue.main.async {
@@ -78,7 +82,8 @@ extension EditProfileVC: EditProfileViewModelDelegate{
     }
 }
 
-extension EditProfileVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+// MARK: - UIImagePickerController Delegate
+extension EditProfileVC: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         dismiss(animated: true, completion: nil)
         

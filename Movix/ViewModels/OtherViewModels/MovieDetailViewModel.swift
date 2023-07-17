@@ -8,17 +8,24 @@
 import Foundation
 
 class MovieDetailViewModel{
+    
+    // MARK: - Service
     let service: MovieServiceProtocol?
+    
+    // MARK: - Delegate
     weak var delegate: MovieDetailViewModelDelegate?
     
+    // MARK: - Properties
     var movie: Movie?
     var videoKey: String?
     var sectionList = [(title: String, movies: [Movie], url: String)]()
     
+    // MARK: - Initialization
     init(service: MovieServiceProtocol) {
         self.service = service
     }
     
+    // MARK: - Public Methods
     func getMovieDetail(id: Int){
         sectionList = [
             (title : "Similar Movies", movies: [Movie](), url: ApiRoutes.similarMovies(id: id)),

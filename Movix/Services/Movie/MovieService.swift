@@ -66,7 +66,7 @@ class MovieService: MovieServiceProtocol{
     func searchMovie(query: String, page: Int, completion: @escaping ((MovieApiResponse?) -> ())) {
         let queryParams = ["api_key" : ApiRoutes.tmdbApiKey, "query": query, "page": String(page), "include_adult": "false"]
         
-        let searchMovieRequest = ApiRequest(url: ApiRoutes.searchMovie(), method: .GET, headers: nil, queryParams: queryParams, body: nil)
+        let searchMovieRequest = ApiRequest(url: ApiRoutes.searchMovie, method: .GET, headers: nil, queryParams: queryParams, body: nil)
         
         manager?.request(searchMovieRequest, completion: { (result: Result<MovieApiResponse, Error>) in
             switch result {
@@ -97,7 +97,7 @@ class MovieService: MovieServiceProtocol{
     func addMovieComment(id: Int, comment: String, completion: @escaping (Result<LaravelApiResponse<MovieComment>, Error>) -> ()) {
         guard let token = UserSessionManager.shared.getBearerToken() else { return }
         
-        let getMovieCommentsRequest = ApiRequest(url: ApiRoutes.addMovieComment(), method: .POST, headers: ["Authorization": "Bearer \(token)"], queryParams: ["movie_id": id, "comment": comment], body: nil)
+        let getMovieCommentsRequest = ApiRequest(url: ApiRoutes.addMovieComment, method: .POST, headers: ["Authorization": "Bearer \(token)"], queryParams: ["movie_id": id, "comment": comment], body: nil)
         
         manager?.request(getMovieCommentsRequest) { (result: Result<LaravelApiResponse<MovieComment>, Error>) in
             switch result {

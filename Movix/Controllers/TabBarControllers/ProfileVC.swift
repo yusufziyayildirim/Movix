@@ -15,11 +15,20 @@ protocol ProfileViewModelDelegate: AnyObject{
 
 class ProfileVC: UIViewController {
     
+    // MARK: - Outlets
     @IBOutlet weak var profileTableView: UITableView!
     
+    // MARK: - ViewModel
+    let viewModel = ProfileViewModel(service: AuthService())
+    
+    // MARK: - Properties
+    let cell = SettingsTableViewCell()
     let profileImageView = UIImageView()
     let nameLabel = UILabel()
+    var loadingView = UIView()
+    var isProfilePageActive = false
     
+    // MARK: - TableView items
     let items: [[(title: String, image: String, color: UIColor?)]] = [
         [
             (title: "Edit Profile", image: "person.fill", color: UIColor(red: 0.4, green: 0.6, blue: 1.0, alpha: 1.0)),
@@ -35,27 +44,13 @@ class ProfileVC: UIViewController {
         ]
     ]
     
-    let viewModel = ProfileViewModel(service: AuthService())
-    let cell = SettingsTableViewCell()
-    
-    var isProfilePageActive = false
-    
-    var loadingView = UIView()
-    
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         viewModel.delegate = self
-        profileTableView.backgroundColor = .systemGroupedBackground
         
-        profileTableView.delegate = self
-        profileTableView.dataSource = self
-        
-        profileTableView.separatorInset = .zero
-        profileTableView.register(cell.nib, forCellReuseIdentifier: cell.id)
-        
-        let headerView = createHeaderView()
-        profileTableView.tableHeaderView = headerView
+        configureProfileTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -76,7 +71,20 @@ class ProfileVC: UIViewController {
         }
     }
     
-    func createHeaderView() -> UIView {
+    // MARK: - Private Methods
+    private func configureProfileTableView() {
+        profileTableView.backgroundColor = .systemGroupedBackground
+        profileTableView.delegate = self
+        profileTableView.dataSource = self
+        
+        profileTableView.separatorInset = .zero
+        profileTableView.register(cell.nib, forCellReuseIdentifier: cell.id)
+        
+        let headerView = createHeaderView()
+        profileTableView.tableHeaderView = headerView
+    }
+    
+    private func createHeaderView() -> UIView {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: profileTableView.bounds.width, height: 80))
         headerView.backgroundColor = UIColor.secondarySystemGroupedBackground
         
@@ -111,7 +119,7 @@ class ProfileVC: UIViewController {
         return headerView
     }
     
-    func setData() {
+    private func setData() {
         nameLabel.text = UserSessionManager.shared.getUsername()
         if let url = UserSessionManager.shared.getUserImageUrl() {
             profileImageView.sd_setImage(with: url)
@@ -120,7 +128,7 @@ class ProfileVC: UIViewController {
         }
     }
     
-    func navigateToSavedMoviesScreen(title: String, status: MovieStatus) {
+    private func navigateToSavedMoviesScreen(title: String, status: MovieStatus) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let destinationVC = storyboard.instantiateViewController(withIdentifier: "SavedMoviesListVC") as! SavedMoviesListVC
         destinationVC.status = status
@@ -128,21 +136,21 @@ class ProfileVC: UIViewController {
         navigationController?.pushViewController(destinationVC, animated: true)
     }
     
-    func navigateToEditProfileScreen() {
+    private func navigateToEditProfileScreen() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let destinationVC = storyboard.instantiateViewController(withIdentifier: "EditProfileVC") as! EditProfileVC
         isProfilePageActive = true
         navigationController?.pushViewController(destinationVC, animated: true)
     }
     
-    func navigateToChangePasswordScreen() {
+    private func navigateToChangePasswordScreen() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let destinationVC = storyboard.instantiateViewController(withIdentifier: "ChangePasswordVC") as! ChangePasswordVC
         isProfilePageActive = true
         navigationController?.pushViewController(destinationVC, animated: true)
     }
     
-    func showSignOutAlert() {
+    private func showSignOutAlert() {
         let alertController = UIAlertController(title: "Logout", message: "Are you sure you want to log out?", preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -157,7 +165,7 @@ class ProfileVC: UIViewController {
         present(alertController, animated: true, completion: nil)
     }
 
-    func startSignOut() {
+    private func startSignOut() {
         loadingView = createLoadingView()
         view.addSubview(loadingView)
         viewModel.signOut()
@@ -184,7 +192,7 @@ class ProfileVC: UIViewController {
    
 }
 
-
+// MARK: - TableView Delegate and DataSource
 extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -249,8 +257,9 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     
 }
 
-
+// MARK: - Profile ViewModel Delegate
 extension ProfileVC: ProfileViewModelDelegate{
+    
     func performSignOut() {
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "Auth", bundle: nil)

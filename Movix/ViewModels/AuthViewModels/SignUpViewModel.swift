@@ -9,17 +9,24 @@ import Foundation
 
 final class SignUpViewModel{
     
+    // MARK: - Service
     let service: AuthServiceProtocol?
+    
+    // MARK: - Delegate
     weak var delegate: SignUpViewModelDelegate?
     
+    // MARK: - Initialization
     init(service: AuthServiceProtocol) {
         self.service = service
     }
     
+    // MARK: - Public Methods
     func signUp(name: String, email: String, password: String, passwordConfrim: String){
         delegate?.updateIndicator(isLoading: true)
         
-        service?.signUp(name: name, email: email, password: password, passwordConfrim: passwordConfrim, completion: { result in
+        service?.signUp(name: name, email: email, password: password, passwordConfrim: passwordConfrim, completion: { [weak self] result in
+            guard let self = self else { return }
+            
             self.delegate?.updateIndicator(isLoading: false)
             switch result {
             case .success(let response):

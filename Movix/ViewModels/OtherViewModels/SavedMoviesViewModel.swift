@@ -9,10 +9,13 @@ import Foundation
 
 class SavedMoviesViewModel{
     
+    // MARK: - Delegate
     weak var delegate: SavedMoviesViewModelDelegate?
     
+    // MARK: - Properties
     var movies: [Movie] = []
     
+    // MARK: - Public Methods
     func getSavedMovies(status: MovieStatus){
         do{
             let result = try CoreDataManager.shared.fetchMovies(withStatus: status)

@@ -8,16 +8,20 @@
 import UIKit
 
 class MovieActionButtonViewModel {
+    
+    // MARK: - Properties
     let movie: Movie
     let status: MovieStatus
     let imageName: String
     
+    // MARK: - Initialization
     init(movie: Movie, status: MovieStatus, imageName: String) {
         self.movie = movie
         self.status = status
         self.imageName = imageName
     }
     
+    // MARK: - Computed Properties
     var isMovieInStatus: Bool {
         do {
             let movies = try CoreDataManager.shared.fetchMovies(withStatus: status)
@@ -36,6 +40,7 @@ class MovieActionButtonViewModel {
         return isMovieInStatus ? UIImage(systemName: "\(imageName).fill") : UIImage(systemName: imageName)
     }
     
+    // MARK: - Public Methods
     func performAction() {
         do {
             if isMovieInStatus {

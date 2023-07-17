@@ -13,11 +13,13 @@ protocol SearchViewModelDelegate: AnyObject{
 
 class SearchVC: UIViewController {
     
+    // MARK: - Outlets
     @IBOutlet weak var searchResultsTableView: UITableView!
     @IBOutlet weak var resultsTitle: UILabel!
     @IBOutlet weak var clearButton: UIButton!
     @IBOutlet weak var resultsTitleView: UIView!
     
+    // MARK: - Search Controller
     private let searchController: UISearchController = {
         let controller = UISearchController()
         controller.searchBar.placeholder = "Search for a Movie"
@@ -25,11 +27,14 @@ class SearchVC: UIViewController {
         return controller
     }()
     
+    // MARK: - ViewModel
     let viewModel = SearchViewModel(service: MovieService())
-    var movies = [Movie]()
     
+    // MARK: - Properties
+    var movies = [Movie]()
     let cell = MovieTableViewCell()
     
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -44,35 +49,22 @@ class SearchVC: UIViewController {
         
     }
     
-    
+    // MARK: - Actions
     @IBAction func clearBtnTapped(_ sender: Any) {
         if !viewModel.searchHistoryMovies.isEmpty{
             showClearSearchHistoryAlert()
         }
     }
     
-    func showClearSearchHistoryAlert() {
-        let alertController = UIAlertController(title: "Clear Search History", message: "Are you sure you want to clear your search history?", preferredStyle: .alert)
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alertController.addAction(cancelAction)
-        
-        let clearAction = UIAlertAction(title: "Clear", style: .destructive) { [weak self] _ in
-            self?.viewModel.clearSearchHistory()
-        }
-        alertController.addAction(clearAction)
-        
-        present(alertController, animated: true, completion: nil)
-    }
-    
-    func addBottomBorderToView(view: UIView) {
+    // MARK: - Private Methods
+    private func addBottomBorderToView(view: UIView) {
         let borderLayer = CALayer()
         borderLayer.frame = CGRect(x: 0, y: view.frame.size.height - 1, width: view.frame.size.width, height: 1)
         borderLayer.backgroundColor = UIColor.systemGray.cgColor
         view.layer.addSublayer(borderLayer)
     }
     
-    func configureSearchResultTableView() {
+    private func configureSearchResultTableView() {
         searchResultsTableView.delegate = self
         searchResultsTableView.dataSource = self
         searchResultsTableView.register(cell.nib, forCellReuseIdentifier: cell.id)
@@ -90,14 +82,21 @@ class SearchVC: UIViewController {
         }
     }
     
-    func navigateToDetailScreen(with id: Int) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let destinationVC = storyboard.instantiateViewController(withIdentifier: "MovieDetailVC") as! MovieDetailVC
-        destinationVC.movieId = id
-        navigationController?.pushViewController(destinationVC, animated: true)
+    private func showClearSearchHistoryAlert() {
+        let alertController = UIAlertController(title: "Clear Search History", message: "Are you sure you want to clear your search history?", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        let clearAction = UIAlertAction(title: "Clear", style: .destructive) { [weak self] _ in
+            self?.viewModel.clearSearchHistory()
+        }
+        alertController.addAction(clearAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
     
-    func createEmptySearchView() -> UIView {
+    private func createEmptySearchView() -> UIView {
         let messageLabel = UILabel()
         messageLabel.text = "Movie not found"
         messageLabel.textColor = UIColor.gray
@@ -113,23 +112,32 @@ class SearchVC: UIViewController {
         return emptySearchView
     }
     
+    private func navigateToDetailScreen(with id: Int) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let destinationVC = storyboard.instantiateViewController(withIdentifier: "MovieDetailVC") as! MovieDetailVC
+        destinationVC.movieId = id
+        navigationController?.pushViewController(destinationVC, animated: true)
+    }
+    
 }
 
+// MARK: - TableView Delegate and DataSource
 extension SearchVC: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if !viewModel.searchResult {
-               tableView.backgroundView = createEmptySearchView()
-               tableView.separatorStyle = .none
-               return 0
-           } else if !movies.isEmpty && viewModel.searchResult {
-               tableView.backgroundView = nil
-               tableView.separatorStyle = .singleLine
-               return movies.count
-           } else {
-               tableView.backgroundView = nil
-               tableView.separatorStyle = .singleLine
-               return viewModel.searchHistoryMovies.count
-           }
+            tableView.backgroundView = createEmptySearchView()
+            tableView.separatorStyle = .none
+            return 0
+        } else if !movies.isEmpty && viewModel.searchResult {
+            tableView.backgroundView = nil
+            tableView.separatorStyle = .singleLine
+            return movies.count
+        } else {
+            tableView.backgroundView = nil
+            tableView.separatorStyle = .singleLine
+            return viewModel.searchHistoryMovies.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -173,8 +181,6 @@ extension SearchVC: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    
-    
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let selectedMovie: Movie
         if !self.movies.isEmpty {
@@ -193,27 +199,28 @@ extension SearchVC: UITableViewDelegate, UITableViewDataSource {
                 let favoriteButtonViewModel = MovieActionButtonViewModel(movie: selectedMovie, status: .favoriteMovies, imageName: "star")
                 let watchlistButtonViewModel = MovieActionButtonViewModel(movie: selectedMovie, status: .watchlist, imageName: "bookmark")
                 let historyButtonViewModel = MovieActionButtonViewModel(movie: selectedMovie, status: .watchHistory, imageName: "checkmark.seal")
-
+                
                 let favoriteAction = UIAction(title: favoriteButtonViewModel.buttonTitle, image: favoriteButtonViewModel.buttonImage) { _ in
                     favoriteButtonViewModel.performAction()
                 }
-
+                
                 let watchlistAction = UIAction(title: watchlistButtonViewModel.buttonTitle, image: watchlistButtonViewModel.buttonImage) { _ in
                     watchlistButtonViewModel.performAction()
                 }
-
+                
                 let historyAction = UIAction(title: historyButtonViewModel.buttonTitle, image: historyButtonViewModel.buttonImage) { _ in
                     historyButtonViewModel.performAction()
                 }
-
+                
                 return UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [favoriteAction, watchlistAction, historyAction])
                 
             }
         return config
-
+        
     }
 }
 
+// MARK: - UISearchController Delegate, UISearchResults Updating
 extension SearchVC: UISearchControllerDelegate, UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
@@ -226,6 +233,7 @@ extension SearchVC: UISearchControllerDelegate, UISearchResultsUpdating {
               query.trimmingCharacters(in: .whitespaces).count >= 3 else {
             
             resultsTitle.text = "Search History"
+            viewModel.searchResult = true
             clearButton.isHidden = false
             
             viewModel.movies.value = []
@@ -239,7 +247,7 @@ extension SearchVC: UISearchControllerDelegate, UISearchResultsUpdating {
     }
 }
 
-
+// MARK: - Search ViewModel Delegate
 extension SearchVC: SearchViewModelDelegate {
     func reloadTableView() {
         searchResultsTableView.reloadOnMainThread()

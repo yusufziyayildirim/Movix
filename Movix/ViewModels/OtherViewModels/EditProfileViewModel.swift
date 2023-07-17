@@ -8,17 +8,25 @@
 import Foundation
 
 class EditProfileViewModel{
+    
+    // MARK: - Service
     let service: AuthServiceProtocol?
+    
+    // MARK: - Delegate
     weak var delegate: EditProfileViewModelDelegate?
     
+    // MARK: - Initialization
     init(service: AuthServiceProtocol) {
         self.service = service
     }
   
+    // MARK: - Public Methods
     func editProfile(name: String, image: Data?) {
         delegate?.updateIndicator(isLoading: true)
         
-        service?.editProfile(name: name, image: image) { result in
+        service?.editProfile(name: name, image: image) { [weak self] result in
+            guard let self = self else { return }
+            
             self.delegate?.updateIndicator(isLoading: false)
             switch result {
             case .success(let response):

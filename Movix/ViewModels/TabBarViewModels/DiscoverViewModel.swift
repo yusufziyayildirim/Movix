@@ -9,19 +9,25 @@ import Foundation
 
 class DiscoverViewModel: ObservableObject{
     
+    // MARK: - Service
     let service: MovieServiceProtocol?
+    
+    // MARK: - Delegate
     weak var delegate: DiscoverViewModelDelegate?
     
+    // MARK: - Properties
     @Published var fetchedMovies: [Movie] = []
     @Published var removedMovies = [Movie]()
     private var page = Int.random(in: 1..<300)
     var shouldDownloadMore: Bool = true
     
+    // MARK: - Initialization
     init(service: MovieServiceProtocol){
         self.service = service
         getDiscoverMovies()
     }
     
+    // MARK: - Public Methods
     func getIndex(movie: Movie) -> Int{
         return fetchedMovies.firstIndex(where: { currentMovie in
             return movie.id == currentMovie.id
@@ -29,7 +35,7 @@ class DiscoverViewModel: ObservableObject{
     }
     
     func getDiscoverMovies() {
-        service?.getMovies(url: ApiRoutes.discoverMovies(), page: page, completion: { [weak self] result in
+        service?.getMovies(url: ApiRoutes.discoverMovies, page: page, completion: { [weak self] result in
             guard let self = self else { return }
             guard let returnedMovies = result else { return }
             

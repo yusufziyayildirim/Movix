@@ -9,6 +9,7 @@ import UIKit
 
 class PasswordTextField: UITextField {
     
+    // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -19,6 +20,7 @@ class PasswordTextField: UITextField {
         setup()
     }
     
+    // MARK: - Private Methods
     private func setup() {
         self.isSecureTextEntry = true
         
@@ -35,6 +37,7 @@ class PasswordTextField: UITextField {
         button.addTarget(self, action: #selector(showHidePassword(_:)), for: .touchUpInside)
     }
     
+    // MARK: - Button Action
     @objc private func showHidePassword(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
         self.isSecureTextEntry = !sender.isSelected

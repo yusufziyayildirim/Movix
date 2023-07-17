@@ -12,14 +12,17 @@ protocol ForgotPasswordViewModelDelegate: AnyObject{
     func updateIndicator(isLoading: Bool)
 }
 
-class ForgotPasswordVC: UIViewController, ForgotPasswordViewModelDelegate {
+class ForgotPasswordVC: UIViewController {
 
+    // MARK: - Outlets
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var sendButton: LoadingButton!
     
+    // MARK: - ViewModel
     let viewModel = ForgotPasswordViewModel(service: AuthService())
     
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -27,15 +30,7 @@ class ForgotPasswordVC: UIViewController, ForgotPasswordViewModelDelegate {
         configureUI()
     }
     
-    func configureUI(){
-        emailTextField.addLeftIcon(UIImage(systemName: "envelope"))
-        emailTextField.addShadow(opacity: 0.15, shadowRadius: 3)
-        
-        sendButton.layer.cornerRadius = 10
-        sendButton.clipsToBounds = true
-        sendButton.addShadow(opacity: 0.2, shadowRadius: 5)
-    }
-    
+    // MARK: - Actions
     @IBAction func sendBtnTapped(_ sender: Any) {
         if let emailText = emailTextField.text {
             let result = validateData(emailText: emailText)
@@ -45,7 +40,17 @@ class ForgotPasswordVC: UIViewController, ForgotPasswordViewModelDelegate {
         }
     }
     
-    func validateData(emailText: String) -> Bool {
+    // MARK: - Private Methods
+    private func configureUI(){
+        emailTextField.addLeftIcon(UIImage(systemName: "envelope"))
+        emailTextField.addShadow(opacity: 0.15, shadowRadius: 3)
+        
+        sendButton.layer.cornerRadius = 10
+        sendButton.clipsToBounds = true
+        sendButton.addShadow(opacity: 0.2, shadowRadius: 5)
+    }
+    
+    private func validateData(emailText: String) -> Bool {
         if emailText.isEmpty {
             message(message: "Email field is required")
             return false
@@ -58,6 +63,11 @@ class ForgotPasswordVC: UIViewController, ForgotPasswordViewModelDelegate {
         
         return true
     }
+    
+}
+
+// MARK: - ForgotPassword ViewModel Delegate
+extension ForgotPasswordVC: ForgotPasswordViewModelDelegate{
     
     func message(message: String, isSuccess: Bool = false) {
         DispatchQueue.main.async {
@@ -73,4 +83,5 @@ class ForgotPasswordVC: UIViewController, ForgotPasswordViewModelDelegate {
             sendButton.hideLoading()
         }
     }
+    
 }

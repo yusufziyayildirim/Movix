@@ -10,18 +10,20 @@ import SDWebImage
 
 class MovieCommentsTableViewCell: UITableViewCell {
     
+    // MARK: - Outlets
     @IBOutlet weak var userImg: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var commentDateLabel: UILabel!
     @IBOutlet weak var commentLabel: UILabel!
     
+    // MARK: - Cell Identifier and Nib
     public let id = "movieCommentsTableViewCell"
     public let nib = UINib(nibName: "MovieCommentsTableViewCell", bundle: nil)
     
+    // MARK: - Lifecycle Methods
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        userImg.layer.cornerRadius = userImg.bounds.width / 2
+        configureUI()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -30,7 +32,21 @@ class MovieCommentsTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    // MARK: - Private Methods
+    
+    private func configureUI() {
+        userImg.layer.cornerRadius = userImg.bounds.width / 2
+    }
+    
+    // MARK: - Public Methods
+
+    /**
+     Sets the data for the movie comment cell.
+     
+     - Parameter movieComment: The movie comment object containing the data.
+     */
     public func setData(with movieComment: MovieComment) {
+        // Set data to UI elements
         self.userNameLabel.text = movieComment.user?.name
         self.commentLabel.text = movieComment.comment
         

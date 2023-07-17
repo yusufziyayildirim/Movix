@@ -19,6 +19,7 @@ protocol MovieDetailViewModelDelegate: AnyObject{
 
 class MovieDetailVC: UIViewController{
     
+    // MARK: - Outlets
     @IBOutlet weak var movieTrailerView: UIView!
     @IBOutlet weak var posterImg: UIImageView!
     @IBOutlet weak var playButton: LoadingButton!
@@ -30,19 +31,18 @@ class MovieDetailVC: UIViewController{
     @IBOutlet weak var movieOverview: UILabel!
     @IBOutlet weak var movieRecommendsTable: UITableView!
     
-    var loadingView: UIView?
-    var activityIndicator: UIActivityIndicatorView?
-    
-    var player: YTPlayerView!
-    
-    private let cell = MovieCollectionTableViewCell()
-    
-    var movieId = Int()
+    // MARK: - ViewModel
     let viewModel = MovieDetailViewModel(service: MovieService())
     
-    
+    // MARK: - Properties
+    private let cell = MovieCollectionTableViewCell()
+    var player: YTPlayerView!
+    var loadingView: UIView?
+    var activityIndicator: UIActivityIndicatorView?
+    var movieId = Int()
     var menuButton = UIBarButtonItem(title: nil, image: UIImage(systemName: "ellipsis"), primaryAction: nil, menu: nil)
     
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureLoadingView()
@@ -56,7 +56,17 @@ class MovieDetailVC: UIViewController{
         navigationItem.rightBarButtonItem = menuButton
     }
     
-    func configureUI() {
+    // MARK: - Actions
+    @IBAction func playBtnTapped(_ sender: Any) {
+        startVideo()
+    }
+    
+    @IBAction func commentsBtnTapped(_ sender: Any) {
+        navigateToMovieCommentsScreen(with: movieId)
+    }
+    
+    // MARK: - Private Methods
+    private func configureUI() {
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [UIColor.black.withAlphaComponent(0.5).cgColor, UIColor.black.withAlphaComponent(0.5).cgColor]
         gradientLayer.locations = [0.0, 1.0]
@@ -68,7 +78,7 @@ class MovieDetailVC: UIViewController{
         movieOverview.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
     }
     
-    func configureLoadingView() {
+    private func configureLoadingView() {
         loadingView = UIView(frame: view.bounds)
         loadingView?.backgroundColor = UIColor.systemBackground
         loadingView?.alpha = 1
@@ -83,17 +93,7 @@ class MovieDetailVC: UIViewController{
         }
     }
     
-    func changeLoadingViewState(isHidden: Bool) {
-        DispatchQueue.main.async {
-            self.loadingView?.isHidden = isHidden
-        }
-        
-        if isHidden {
-            menuButton.menu = createMenu()
-        }
-    }
-    
-    func configureTableView() {
+    private func configureTableView() {
         movieRecommendsTable.isScrollEnabled = false
         movieRecommendsTable.delegate = self
         movieRecommendsTable.dataSource = self
@@ -102,22 +102,7 @@ class MovieDetailVC: UIViewController{
         movieRecommendsTable.separatorStyle = .none
     }
     
-    func hidePlayButton() {
-        DispatchQueue.main.async {
-            self.playButton.isHidden = true
-        }
-    }
-    
-    @IBAction func playBtnTapped(_ sender: Any) {
-        startVideo()
-    }
-    
-    
-    @IBAction func commentsBtnTapped(_ sender: Any) {
-        navigateToMovieCommentsScreen(with: movieId)
-    }
-    
-    func startVideo() {
+    private func startVideo() {
         self.playButton.showLoading()
         self.playButton.setImage(nil, for: .normal)
         
@@ -132,7 +117,7 @@ class MovieDetailVC: UIViewController{
         player.load(withVideoId: videoID, playerVars: ["playsinline" : 0, "fs" : 1])
     }
     
-    func navigateToSeeAllScreen(row: Int) {
+    private func navigateToSeeAllScreen(row: Int) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let destinationVC = storyboard.instantiateViewController(withIdentifier: "SeeAllVC") as! SeeAllVC
         destinationVC.url = viewModel.sectionList[row].url
@@ -141,7 +126,7 @@ class MovieDetailVC: UIViewController{
         
     }
     
-    func navigateToDetailScreen(with id: Int) {
+    private func navigateToDetailScreen(with id: Int) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let destinationVC = storyboard.instantiateViewController(withIdentifier: "MovieDetailVC") as! MovieDetailVC
         destinationVC.movieId = id
@@ -149,7 +134,7 @@ class MovieDetailVC: UIViewController{
     }
     
     
-    func navigateToMovieCommentsScreen(with id: Int) {
+    private func navigateToMovieCommentsScreen(with id: Int) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let destinationVC = storyboard.instantiateViewController(withIdentifier: "MovieCommentsVC") as! MovieCommentsVC
         destinationVC.movieId = id
@@ -157,7 +142,7 @@ class MovieDetailVC: UIViewController{
     }
     
     @discardableResult
-    func createMenu() -> UIMenu  {
+    private func createMenu() -> UIMenu  {
         if let movie = viewModel.movie {
             let favoriteButtonViewModel = MovieActionButtonViewModel(movie: movie, status: .favoriteMovies, imageName: "star")
             let watchlistButtonViewModel = MovieActionButtonViewModel(movie: movie, status: .watchlist, imageName: "bookmark")
@@ -185,14 +170,14 @@ class MovieDetailVC: UIViewController{
         return UIMenu()
     }
     
-    func updateMenu() {
+    private func updateMenu() {
         DispatchQueue.main.async {
             self.navigationItem.rightBarButtonItem?.menu = self.createMenu()
         }
     }
 }
 
-
+// MARK: - TableView Delegate and DataSource
 extension MovieDetailVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var count = 0
@@ -223,7 +208,7 @@ extension MovieDetailVC: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-//Mark HomeTableViewCellDelegate
+// MARK: - MovieCollectionTableViewCell ViewModel Delegate
 extension MovieDetailVC: MovieCollectionTableViewCellDelegate {
     func seeAllButtonTapped(row: Int) {
         navigateToSeeAllScreen(row: row)
@@ -234,7 +219,7 @@ extension MovieDetailVC: MovieCollectionTableViewCellDelegate {
     }
 }
 
-//Mark MovieDetailViewModelDelegate
+// MARK: - MovieDetail ViewModel Delegate
 extension MovieDetailVC: MovieDetailViewModelDelegate {
     
     func reloadTableView() {
@@ -286,6 +271,22 @@ extension MovieDetailVC: MovieDetailViewModelDelegate {
         }
     }
     
+    func hidePlayButton() {
+        DispatchQueue.main.async {
+            self.playButton.isHidden = true
+        }
+    }
+    
+    func changeLoadingViewState(isHidden: Bool) {
+        DispatchQueue.main.async {
+            self.loadingView?.isHidden = isHidden
+        }
+        
+        if isHidden {
+            menuButton.menu = createMenu()
+        }
+    }
+    
     func changeTableViewHeight(with count: Int){
         let tableViewHeight = CGFloat(300 * count)
         DispatchQueue.main.async {
@@ -300,7 +301,7 @@ extension MovieDetailVC: MovieDetailViewModelDelegate {
     }
 }
 
-//Mark YTPlayerViewDelegate
+// MARK: - YTPlayer ViewModel Delegate
 extension MovieDetailVC: YTPlayerViewDelegate {
     func playerViewDidBecomeReady(_ playerView: YTPlayerView) {
         playButton.hideLoading()

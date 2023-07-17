@@ -9,17 +9,24 @@ import Foundation
 
 final class VerifyEmailViewModel{
     
+    // MARK: - Service
     let service: AuthServiceProtocol?
+    
+    // MARK: - Delegate
     weak var delegate: VerifyEmailViewModelDelegate?
     
+    // MARK: - Initialization
     init(service: AuthServiceProtocol) {
         self.service = service
     }
     
+    // MARK: - Public Methods
     func verifyEmail(email: String){
         delegate?.updateIndicator(isLoading: true)
         
-        service?.resendVerifyEmail(email: email, completion: { result in
+        service?.resendVerifyEmail(email: email, completion: { [weak self] result in
+            guard let self = self else { return }
+            
             self.delegate?.updateIndicator(isLoading: false)
             switch result {
             case .success(let response):

@@ -9,6 +9,10 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct CarouselView: View {
+    @State private var activeIndex = 0
+    @State private var dragOffset: CGFloat = 0
+    @State private var isAnimatedOffset = false
+    
     let movies: [Movie]
     let onTap: (Int) -> Void
     
@@ -16,10 +20,6 @@ struct CarouselView: View {
         self.movies = movies
         self.onTap = onTap
     }
-    
-    @State private var activeIndex = 0
-    @State private var dragOffset: CGFloat = 0
-    @State private var isAnimatedOffset = false
     
     var body: some View {
         GeometryReader { geometry in

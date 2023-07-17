@@ -12,8 +12,9 @@ protocol SignUpViewModelDelegate: AnyObject {
     func updateIndicator(isLoading: Bool)
 }
 
-class SignUpVC: UIViewController, SignUpViewModelDelegate {
+class SignUpVC: UIViewController {
     
+    // MARK: - Outlets
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: PasswordTextField!
@@ -21,16 +22,29 @@ class SignUpVC: UIViewController, SignUpViewModelDelegate {
     @IBOutlet weak var signUpButton: LoadingButton!
     @IBOutlet weak var subtitleLabel: UILabel!
     
+    // MARK: - ViewModel
     let viewModel = SignUpViewModel(service: AuthService())
     
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
         viewModel.delegate = self
         configureUI()
     }
-
-    func configureUI(){
+    
+    // MARK: - Actions
+    @IBAction func signUpBtnTapped(_ sender: Any) {
+        if let nameText = nameTextField.text, let emailText = emailTextField.text, let passwordText = passwordTextField.text, let passwordConfrimText = passwordConfrimTextField.text{
+            let result = validateData(nameText: nameText, emailText: emailText, passwordText: passwordText, passwordConfrimText: passwordConfrimText)
+            if result{
+                viewModel.signUp(name: nameText, email: emailText, password: passwordText, passwordConfrim: passwordConfrimText)
+            }
+        }
+    }
+    
+    // MARK: - Private Methods
+    private func configureUI(){
         nameTextField.addLeftIcon(UIImage(systemName: "person"))
         nameTextField.addShadow(opacity: 0.15, shadowRadius: 3)
         
@@ -48,16 +62,7 @@ class SignUpVC: UIViewController, SignUpViewModelDelegate {
         signUpButton.addShadow(opacity: 0.2, shadowRadius: 5)
     }
     
-    @IBAction func signUpBtnTapped(_ sender: Any) {
-        if let nameText = nameTextField.text, let emailText = emailTextField.text, let passwordText = passwordTextField.text, let passwordConfrimText = passwordConfrimTextField.text{
-            let result = validateData(nameText: nameText, emailText: emailText, passwordText: passwordText, passwordConfrimText: passwordConfrimText)
-            if result{
-                viewModel.signUp(name: nameText, email: emailText, password: passwordText, passwordConfrim: passwordConfrimText)
-            }
-        }
-    }
-    
-    func validateData(nameText: String, emailText: String, passwordText: String, passwordConfrimText: String) -> Bool {
+    private func validateData(nameText: String, emailText: String, passwordText: String, passwordConfrimText: String) -> Bool {
         if nameText.isEmpty || emailText.isEmpty || passwordText.isEmpty || passwordConfrimText.isEmpty {
             message(message: "Please fill in all the required fields")
             return false
@@ -80,6 +85,10 @@ class SignUpVC: UIViewController, SignUpViewModelDelegate {
         
         return true
     }
+}
+
+// MARK: - SignUp ViewModel Delegate
+extension SignUpVC: SignUpViewModelDelegate{
     
     func message(message: String, isSuccess: Bool = false) {
         DispatchQueue.main.async {
@@ -96,5 +105,4 @@ class SignUpVC: UIViewController, SignUpViewModelDelegate {
         }
     }
     
-
 }

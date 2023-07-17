@@ -13,14 +13,18 @@ protocol SavedMoviesViewModelDelegate: AnyObject{
 
 class SavedMoviesListVC: UIViewController {
     
+    // MARK: - Outlets
     @IBOutlet weak var moviesTableView: UITableView!
     
+    // MARK: - ViewModel
     let viewModel = SavedMoviesViewModel()
-    let cell = MovieTableViewCell()
     
+    // MARK: - Properties
+    let cell = MovieTableViewCell()
     var status: MovieStatus = .watchlist
     var pageTitle = ""
     
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = pageTitle
@@ -28,8 +32,8 @@ class SavedMoviesListVC: UIViewController {
         configureMovieTableView()
     }
     
-    
-    func configureMovieTableView() {
+    // MARK: - Private Methods
+    private func configureMovieTableView() {
         moviesTableView.delegate = self
         moviesTableView.dataSource = self
         moviesTableView.register(cell.nib, forCellReuseIdentifier: cell.id)
@@ -37,14 +41,14 @@ class SavedMoviesListVC: UIViewController {
         viewModel.getSavedMovies(status: status)
     }
     
-    func navigateToDetailScreen(with id: Int) {
+    private func navigateToDetailScreen(with id: Int) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let destinationVC = storyboard.instantiateViewController(withIdentifier: "MovieDetailVC") as! MovieDetailVC
         destinationVC.movieId = id
         navigationController?.pushViewController(destinationVC, animated: true)
     }
     
-    func createEmptySearchView() -> UIView {
+    private func createEmptySearchView() -> UIView {
         let messageLabel = UILabel()
         messageLabel.text = "No saved movies available"
         messageLabel.textColor = UIColor.gray
@@ -62,6 +66,7 @@ class SavedMoviesListVC: UIViewController {
     
 }
 
+// MARK: - TableView Delegate and DataSource
 extension SavedMoviesListVC: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -145,6 +150,7 @@ extension SavedMoviesListVC: UITableViewDelegate, UITableViewDataSource{
     }
 }
 
+// MARK: - SavedMovies ViewModel Delegate
 extension SavedMoviesListVC: SavedMoviesViewModelDelegate {
     func reloadTableView() {
         self.moviesTableView.reloadOnMainThread()

@@ -14,11 +14,16 @@ protocol HomeViewModelDelegate: AnyObject{
 
 class HomeVC: UIViewController {
     
+    // MARK: - Outlets
     @IBOutlet weak var homeTableView: UITableView!
     
-    let cell = MovieCollectionTableViewCell()
+    // MARK: - ViewModel
     let viewModel = HomeViewModel(service: MovieService())
     
+    // MARK: - Properties
+    let cell = MovieCollectionTableViewCell()
+    
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureHomeTableView()
@@ -45,7 +50,8 @@ class HomeVC: UIViewController {
         }
     }
     
-    func configureHomeTableView() {
+    // MARK: - Private Methods
+    private func configureHomeTableView() {
         homeTableView.delegate = self
         homeTableView.dataSource = self
         homeTableView.allowsSelection = false
@@ -55,7 +61,7 @@ class HomeVC: UIViewController {
         headerViewBind()
     }
     
-    func headerViewBind() {
+    private func headerViewBind() {
         viewModel.headerPosters.bind { [weak self] movies in
             guard let self = self,
                   let movies = movies else {
@@ -71,7 +77,7 @@ class HomeVC: UIViewController {
         }
     }
     
-    func navigateToSeeAllScreen(row: Int) {
+    private func navigateToSeeAllScreen(row: Int) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let destinationVC = storyboard.instantiateViewController(withIdentifier: "SeeAllVC") as! SeeAllVC
         destinationVC.url = viewModel.sectionList[row].url
@@ -80,7 +86,7 @@ class HomeVC: UIViewController {
 
     }
     
-    func navigateToDetailScreen(with id: Int) {
+    private func navigateToDetailScreen(with id: Int) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let destinationVC = storyboard.instantiateViewController(withIdentifier: "MovieDetailVC") as! MovieDetailVC
         destinationVC.movieId = id
@@ -90,7 +96,7 @@ class HomeVC: UIViewController {
 }
 
 
-//MARK TableView delegate and datasource
+// MARK: - TableView Delegate and DataSource
 extension HomeVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -116,7 +122,7 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
     
 }
 
-//Mark HomeTableViewCellDelegate
+// MARK: - MovieCollectionTableViewCell Delegate
 extension HomeVC: MovieCollectionTableViewCellDelegate {
     func seeAllButtonTapped(row: Int) {
         navigateToSeeAllScreen(row: row)
@@ -127,7 +133,7 @@ extension HomeVC: MovieCollectionTableViewCellDelegate {
     }
 }
 
-
+// MARK: - Home ViewModel Delegate
 extension HomeVC: HomeViewModelDelegate {
     func reloadTableView(){
         homeTableView.reloadOnMainThread()

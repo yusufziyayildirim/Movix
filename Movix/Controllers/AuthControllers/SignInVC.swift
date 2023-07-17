@@ -14,16 +14,19 @@ protocol SignInViewModelDelegate: AnyObject {
     func navigateToHomeVC()
 }
 
-final class SignInVC: UIViewController, SignInViewModelDelegate {
+final class SignInVC: UIViewController {
     
+    // MARK: - Outlets
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: PasswordTextField!
     @IBOutlet weak var signInButton: LoadingButton!
     @IBOutlet weak var verifyEmailButton: UIButton!
     
+    // MARK: - ViewModel
     let viewModel = SignInViewModel(service: AuthService())
     
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,7 +34,20 @@ final class SignInVC: UIViewController, SignInViewModelDelegate {
         configureUI()
     }
     
-    func configureUI(){
+    // MARK: - Actions
+    @IBAction func signInButtonTapped(_ sender: Any) {
+        verifyEmailButton.isHidden = true
+        
+        if let emailText = emailTextField.text, let passwordText = passwordTextField.text {
+            let result = validateData(emailText: emailText, passwordText: passwordText)
+            if result {
+                viewModel.signIn(email: emailText, password: passwordText)
+            }
+        }
+    }
+    
+    // MARK: - Private Methods
+    private func configureUI(){
         emailTextField.addLeftIcon(UIImage(systemName: "envelope"))
         emailTextField.addShadow(opacity: 0.15, shadowRadius: 3)
         
@@ -47,19 +63,8 @@ final class SignInVC: UIViewController, SignInViewModelDelegate {
         verifyEmailButton.isHidden = true
         verifyEmailButton.addShadow(opacity: 0.2, shadowRadius: 5)
     }
-    
-    @IBAction func signInButtonTapped(_ sender: Any) {
-        verifyEmailButton.isHidden = true
-        
-        if let emailText = emailTextField.text, let passwordText = passwordTextField.text {
-            let result = validateData(emailText: emailText, passwordText: passwordText)
-            if result {
-                viewModel.signIn(email: emailText, password: passwordText)
-            }
-        }
-    }
    
-    func validateData(emailText: String, passwordText: String) -> Bool {
+    private func validateData(emailText: String, passwordText: String) -> Bool {
         if emailText.isEmpty || passwordText.isEmpty {
             message(message: "Email and password fields are required")
             return false
@@ -73,13 +78,18 @@ final class SignInVC: UIViewController, SignInViewModelDelegate {
         return true
     }
     
+}
+
+// MARK: - SignIn ViewModel Delegate
+extension SignInVC: SignInViewModelDelegate{
+    
     func message(message: String) {
         DispatchQueue.main.async {
             self.subtitleLabel.text = message
             self.subtitleLabel.textColor = UIColor(red: 0.8, green: 0, blue: 0, alpha: 1)
         }
     }
-    
+
     func updateIndicator(isLoading: Bool) {
         if isLoading {
             signInButton.showLoading()

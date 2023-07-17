@@ -15,57 +15,68 @@ protocol MovieCommentsViewModelDelegate: AnyObject{
 
 class MovieCommentsVC: UIViewController {
     
+    // MARK: - Outlets
     @IBOutlet weak var commentAddView: UIView!
     @IBOutlet weak var movieCommentsTableView: UITableView!
     @IBOutlet weak var addCommentTextField: UITextField!
     
-    let cell = MovieCommentsTableViewCell()
+    // MARK: - ViewModel
     let viewModel = MovieCommentsViewModel(service: MovieService())
+    
+    // MARK: - Properties
+    let cell = MovieCommentsTableViewCell()
     var movieId = Int()
     
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         viewModel.delegate = self
         
-        movieCommentsTableView.delegate = self
-        movieCommentsTableView.dataSource = self
-        movieCommentsTableView.separatorInset = .zero
-        movieCommentsTableView.allowsSelection = false
-        movieCommentsTableView.register(cell.nib, forCellReuseIdentifier: cell.id)
-        
-        let borderLayer = CALayer()
-        borderLayer.backgroundColor = UIColor.darkGray.cgColor
-        borderLayer.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 0.4)
-        commentAddView.layer.addSublayer(borderLayer)
+        configureMovieCommentsTableView()
+        configureCommentAddView()
         
         viewModel.getMovieComments(movieId: movieId)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
+    // MARK: - Actions
+    @IBAction func addBtnTapped(_ sender: Any) {
+        viewModel.addComment(movieId: movieId, comment: addCommentTextField.text ?? "")
+    }
     
-    @objc func keyboardWillShow(notification: Notification) {
+    // MARK: - Private Methods
+    @objc private func keyboardWillShow(notification: Notification) {
         guard let userInfo = notification.userInfo,
               let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
             return
         }
         
-        // Klavye yüksekliğini ve animasyon süresini al
         let keyboardHeight = keyboardFrame.height
         let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.3
         
-        // View'ı klavyenin üzerine kaydır
         UIView.animate(withDuration: animationDuration) {
             self.view.frame.origin.y = -keyboardHeight
         }
     }
     
-    @IBAction func addBtnTapped(_ sender: Any) {
-        viewModel.addComment(movieId: movieId, comment: addCommentTextField.text ?? "")
+    private func configureMovieCommentsTableView() {
+        movieCommentsTableView.delegate = self
+        movieCommentsTableView.dataSource = self
+        movieCommentsTableView.separatorInset = .zero
+        movieCommentsTableView.allowsSelection = false
+        movieCommentsTableView.register(cell.nib, forCellReuseIdentifier: cell.id)
     }
     
-    func createEmptyTableView() -> UIView {
+    private func configureCommentAddView() {
+        let borderLayer = CALayer()
+        borderLayer.backgroundColor = UIColor.darkGray.cgColor
+        borderLayer.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 0.4)
+        commentAddView.layer.addSublayer(borderLayer)
+    }
+    
+    private func createEmptyTableView() -> UIView {
         let messageLabel = UILabel()
         messageLabel.text = "The movie has no comments"
         messageLabel.textColor = UIColor.gray
@@ -82,6 +93,7 @@ class MovieCommentsVC: UIViewController {
     }
 }
 
+// MARK: - TableView Delegate and DataSource
 extension MovieCommentsVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if viewModel.comments.isEmpty {
@@ -105,6 +117,7 @@ extension MovieCommentsVC: UITableViewDelegate, UITableViewDataSource{
     }
 }
 
+// MARK: - MovieComments ViewModel Delegate
 extension MovieCommentsVC: MovieCommentsViewModelDelegate{
     func activityIndicatorStaus(status: Bool) {
         if status {

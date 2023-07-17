@@ -14,14 +14,17 @@ protocol ChangePasswordViewModelDelegate: AnyObject{
 
 class ChangePasswordVC: UIViewController {
 
+    // MARK: - Outlets
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var oldPasswordTextField: PasswordTextField!
     @IBOutlet weak var newPasswordTextField: PasswordTextField!
     @IBOutlet weak var newPasswordConfrimTextField: PasswordTextField!
     @IBOutlet weak var changePasswordButton: LoadingButton!
     
+    // MARK: - ViewModel
     let viewModel = ChangePasswordViewModel(service: AuthService())
     
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -29,6 +32,7 @@ class ChangePasswordVC: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    // MARK: - Actions
     @IBAction func changePasswordBtnTapped(_ sender: Any) {
         if let oldPasswordText = oldPasswordTextField.text, let newPasswordText = newPasswordTextField.text, let newPasswordConfrimText = newPasswordConfrimTextField.text{
             let result = validateData(oldPasswordText: oldPasswordText, newPasswordText: newPasswordText, newPasswordConfrimText: newPasswordConfrimText)
@@ -38,7 +42,8 @@ class ChangePasswordVC: UIViewController {
         }
     }
     
-    func validateData(oldPasswordText: String, newPasswordText: String, newPasswordConfrimText: String) -> Bool {
+    // MARK: - Private Methods
+    private func validateData(oldPasswordText: String, newPasswordText: String, newPasswordConfrimText: String) -> Bool {
         if oldPasswordText.isEmpty || newPasswordText.isEmpty || newPasswordConfrimText.isEmpty {
             message(message: "Please fill in all the required fields")
             return false
@@ -58,6 +63,7 @@ class ChangePasswordVC: UIViewController {
     }
 }
 
+// MARK: - ChangePassword ViewModel Delegate
 extension ChangePasswordVC: ChangePasswordViewModelDelegate{
     func message(message: String, isSuccess: Bool = false) {
         DispatchQueue.main.async {

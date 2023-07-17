@@ -9,17 +9,20 @@ import UIKit
 
 class MainVC: UIViewController {
 
+    // MARK: - Outlets
     @IBOutlet weak var mainImg: UIImageView!
     @IBOutlet weak var registerButton: UIButton!
     @IBOutlet weak var loginButton: UIButton!
    
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureUI()
     }
     
-    func configureUI(){
+    // MARK: - Private Methods
+    private func configureUI(){
         mainImg.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5).isActive = true
         mainImg.addShadow(opacity: 0.8, shadowRadius: 20)
         

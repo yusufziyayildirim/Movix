@@ -15,7 +15,7 @@ class AuthService: AuthServiceProtocol {
     func signUp(name: String, email: String, password: String, passwordConfrim: String, completion: @escaping (Result<LaravelApiResponse<String>, Error>) -> ()) {
         let queryParams = ["name" : name, "email" : email, "password": password, "password_confirmation": passwordConfrim]
         
-        let signUpRequest = ApiRequest(url: ApiRoutes.signUp(), method: .POST, headers: nil, queryParams: queryParams, body: nil)
+        let signUpRequest = ApiRequest(url: ApiRoutes.signUp, method: .POST, headers: nil, queryParams: queryParams, body: nil)
         manager?.request(signUpRequest) { (result: Result<LaravelApiResponse<String>, Error>) in
             switch result {
             case .success(let response):
@@ -29,7 +29,7 @@ class AuthService: AuthServiceProtocol {
     func signIn(email: String, password: String, completion: @escaping (Result<LaravelApiResponse<String>, Error>) -> ()) {
         let queryParams = ["email" : email, "password": password]
         
-        let signInRequest = ApiRequest(url: ApiRoutes.signIn(), method: .POST, headers: nil, queryParams: queryParams, body: nil)
+        let signInRequest = ApiRequest(url: ApiRoutes.signIn, method: .POST, headers: nil, queryParams: queryParams, body: nil)
         manager?.request(signInRequest) { (result: Result<LaravelApiResponse<String>, Error>) in
             switch result {
             case .success(let response):
@@ -44,7 +44,7 @@ class AuthService: AuthServiceProtocol {
     }
     
     func signOut(completion: @escaping (Bool) -> ()) {
-        let logoutRequest = ApiRequest(url: ApiRoutes.signOut(), method: .POST, headers: ["Authorization" : "Bearer \(String(describing: UserSessionManager.shared.getBearerToken()))"], queryParams: nil, body: nil)
+        let logoutRequest = ApiRequest(url: ApiRoutes.signOut, method: .POST, headers: ["Authorization" : "Bearer \(String(describing: UserSessionManager.shared.getBearerToken()))"], queryParams: nil, body: nil)
         manager?.request(logoutRequest) { (result: Result<LaravelApiResponse<User>, Error>) in
             switch result {
             case .success(_):
@@ -57,7 +57,7 @@ class AuthService: AuthServiceProtocol {
     }
     
     func isTokenValid(token: String, completion: @escaping (Bool) -> ()) {
-        let loggedUserRequest = ApiRequest(url: ApiRoutes.isTokenValid(), method: .GET, headers: ["Authorization" : "Bearer \(token)"], queryParams: nil, body: nil)
+        let loggedUserRequest = ApiRequest(url: ApiRoutes.isTokenValid, method: .GET, headers: ["Authorization" : "Bearer \(token)"], queryParams: nil, body: nil)
         
         manager?.request(loggedUserRequest) { (result: Result<LaravelApiResponse<[User]>, Error>) in
             switch result {
@@ -75,7 +75,7 @@ class AuthService: AuthServiceProtocol {
     
     
     func forgotPassword(email: String, completion: @escaping (Result<LaravelApiResponse<String>, Error>) -> ()) {
-        let forgotPasswordRequest = ApiRequest(url: ApiRoutes.forgotPassword(), method: .POST, headers: nil, queryParams: ["email": email], body: nil)
+        let forgotPasswordRequest = ApiRequest(url: ApiRoutes.forgotPassword, method: .POST, headers: nil, queryParams: ["email": email], body: nil)
         
         manager?.request(forgotPasswordRequest) { (result: Result<LaravelApiResponse<String>, Error>) in
             switch result {
@@ -88,7 +88,7 @@ class AuthService: AuthServiceProtocol {
     }
     
     func resendVerifyEmail(email: String, completion: @escaping (Result<LaravelApiResponse<String>, Error>) -> ()) {
-        let forgotPasswordRequest = ApiRequest(url: ApiRoutes.resendVerifyEmail(), method: .POST, headers: nil, queryParams: ["email": email], body: nil)
+        let forgotPasswordRequest = ApiRequest(url: ApiRoutes.resendVerifyEmail, method: .POST, headers: nil, queryParams: ["email": email], body: nil)
         
         manager?.request(forgotPasswordRequest) { (result: Result<LaravelApiResponse<String>, Error>) in
             switch result {
@@ -105,7 +105,7 @@ class AuthService: AuthServiceProtocol {
         guard let token = UserSessionManager.shared.getBearerToken() else { return }
         let headers = ["Authorization" : "Bearer \(token)"]
         
-        let changePasswordRequest = ApiRequest(url: ApiRoutes.changePassword(), method: .POST, headers: headers, queryParams: queryParams, body: nil)
+        let changePasswordRequest = ApiRequest(url: ApiRoutes.changePassword, method: .POST, headers: headers, queryParams: queryParams, body: nil)
         manager?.request(changePasswordRequest) { (result: Result<LaravelApiResponse<String>, Error>) in
             switch result {
             case .success(let response):
@@ -138,7 +138,7 @@ class AuthService: AuthServiceProtocol {
         }
         
         
-        let editProfileRequest = ApiRequest(url: ApiRoutes.editProfile(), method: .POST, headers: headers, queryParams: ["name" : name], body: bodyData)
+        let editProfileRequest = ApiRequest(url: ApiRoutes.editProfile, method: .POST, headers: headers, queryParams: ["name" : name], body: bodyData)
         manager?.request(editProfileRequest) { (result: Result<LaravelApiResponse<User>, Error>) in
             switch result {
             case .success(let response):

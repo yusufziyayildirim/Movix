@@ -9,15 +9,19 @@ import UIKit
 
 class SeeAllVC: UIViewController {
     
+    // MARK: - Outlets
     @IBOutlet weak var movieTableView: UITableView!
     
+    // MARK: - ViewModel
     let viewModel = SeeAllViewModel(service: MovieService())
-    var movies = [Movie]()
-    
+        
+    // MARK: - Properties
     let cell = MovieTableViewCell()
     var url = String()
     var pageTitle = String()
+    var movies = [Movie]()
     
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = pageTitle
@@ -25,7 +29,8 @@ class SeeAllVC: UIViewController {
        configureMovieTableView()
     }
     
-    func configureMovieTableView() {
+    // MARK: - Private Methods
+    private func configureMovieTableView() {
         movieTableView.delegate = self
         movieTableView.dataSource = self
         movieTableView.register(cell.nib, forCellReuseIdentifier: cell.id)
@@ -44,7 +49,7 @@ class SeeAllVC: UIViewController {
         }
     }
     
-    func navigateToDetailScreen(with id: Int) {
+    private func navigateToDetailScreen(with id: Int) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let destinationVC = storyboard.instantiateViewController(withIdentifier: "MovieDetailVC") as! MovieDetailVC
         destinationVC.movieId = id
@@ -53,6 +58,7 @@ class SeeAllVC: UIViewController {
     
 }
 
+// MARK: - TableView Delegate and DataSource
 extension SeeAllVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         movies.count

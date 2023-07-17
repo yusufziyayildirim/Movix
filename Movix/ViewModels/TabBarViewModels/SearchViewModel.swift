@@ -8,17 +8,24 @@
 import Foundation
 
 class SearchViewModel {
+    
+    // MARK: - Service
     let service: MovieServiceProtocol
+    
+    // MARK: - Delegate
     weak var delegate: SearchViewModelDelegate?
     
+    // MARK: - Properties
     var movies: Observable<[Movie]> = Observable([])
     var searchHistoryMovies = [Movie]()
     var searchResult = true
     
+    // MARK: - Initialization
     init(service: MovieServiceProtocol) {
         self.service = service
     }
     
+    // MARK: - Public Methods
     func searchMovie(query: String){
         service.searchMovie(query: query, page: 1, completion: { [weak self]  result in
             guard let self = self else { return }

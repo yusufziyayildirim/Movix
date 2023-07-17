@@ -10,6 +10,7 @@ import SDWebImage
 
 class MovieCollectionViewCell: UICollectionViewCell {
     
+    // MARK: - Outlets
     @IBOutlet weak var bgView: UIView!
     @IBOutlet weak var movieImg: UIImageView!
     @IBOutlet weak var movieTitle: UILabel!
@@ -22,18 +23,15 @@ class MovieCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var fourthStar: UIImageView!
     @IBOutlet weak var fifthStar: UIImageView!
     
+    // MARK: - Cell Identifier and Nib
     public let id = "movieCollectionViewCell"
     public let nib = UINib(nibName: "MovieCollectionViewCell", bundle: nil)
     
+    // MARK: - Lifecycle Methods
     override func awakeFromNib() {
         super.awakeFromNib()
         
         configureUI()
-    }
-
-    func configureUI() {
-        bgView.layer.cornerRadius = 10
-        movieImg.layer.cornerRadius = 5
     }
     
     override func prepareForReuse() {
@@ -43,17 +41,18 @@ class MovieCollectionViewCell: UICollectionViewCell {
         self.voteAverage.text = ""
     }
     
-    public func setData(with movie: Movie) {
-        self.movieTitle.text = movie.title
-        self.movieImg.sd_setImage(with: URL(string: ApiRoutes.imageURL(posterPath: movie.posterPath ?? "")), placeholderImage: UIImage(named: "mainImg"))
-        let voteAverage = movie.voteAverage ?? 0
-        self.voteAverage.text = String(format: "%.1f", voteAverage)
-        
-        setStarsColor(with: voteAverage)
+    // MARK: - Private Methods
+    private func configureUI() {
+        bgView.layer.cornerRadius = 10
+        movieImg.layer.cornerRadius = 5
     }
     
+    /**
+     Sets the color of the star icons based on the vote average value.
+     
+     - Parameter voteAverage: The vote average value of the movie.
+     */
     private func setStarsColor(with voteAverage: Double) {
-        
         if voteAverage >= 8 {
             firstStar.tintColor = .systemOrange
             secondStar.tintColor = .systemOrange
@@ -86,4 +85,21 @@ class MovieCollectionViewCell: UICollectionViewCell {
             fifthStar.tintColor = .systemGray2
         }
     }
+    
+    // MARK: - Public Methods
+    
+    /**
+     Sets the data for the movie collection view cell.
+     
+     - Parameter movie: The movie object containing the data.
+     */
+    public func setData(with movie: Movie) {
+        self.movieTitle.text = movie.title
+        self.movieImg.sd_setImage(with: URL(string: ApiRoutes.imageURL(posterPath: movie.posterPath ?? "")), placeholderImage: UIImage(named: "mainImg"))
+        let voteAverage = movie.voteAverage ?? 0
+        self.voteAverage.text = String(format: "%.1f", voteAverage)
+        
+        setStarsColor(with: voteAverage)
+    }
+    
 }

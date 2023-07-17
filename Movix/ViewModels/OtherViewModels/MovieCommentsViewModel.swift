@@ -8,15 +8,22 @@
 import Foundation
 
 class MovieCommentsViewModel{
+    
+    // MARK: - Service
     let service: MovieServiceProtocol?
+    
+    // MARK: - Delegate
     weak var delegate: MovieCommentsViewModelDelegate?
     
+    // MARK: - Properties
     var comments = [MovieComment]()
     
+    // MARK: - Initialization
     init(service: MovieServiceProtocol) {
         self.service = service
     }
     
+    // MARK: - Public Methods
     func addComment(movieId: Int, comment: String) {
         service?.addMovieComment(id: movieId, comment: comment, completion: { [weak self] result in
             guard let self = self else { return }

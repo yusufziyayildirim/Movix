@@ -12,11 +12,12 @@ protocol DiscoverViewModelDelegate: AnyObject {
     func navigateToDetailScreen(with id: Int)
 }
 
-
 class DiscoverVC: UIViewController {
 
+    // MARK: - ViewModel
     let viewModel = DiscoverViewModel(service: MovieService())
     
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -50,7 +51,7 @@ class DiscoverVC: UIViewController {
    
 }
 
-
+// MARK: - Discover ViewModel Delegate
 extension DiscoverVC: DiscoverViewModelDelegate {
     func navigateToDetailScreen(with id: Int) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)

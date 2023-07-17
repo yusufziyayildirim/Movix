@@ -15,41 +15,52 @@ protocol MovieCollectionTableViewCellDelegate: AnyObject {
 
 class MovieCollectionTableViewCell: UITableViewCell {
     
+    // MARK: - Outlets
     @IBOutlet weak var tableViewCellTitle: UILabel!
     @IBOutlet weak var movieCollectionView: UICollectionView!
     
+    // MARK: - Delegate
     weak var delegate: MovieCollectionTableViewCellDelegate?
     
+    // MARK: - Cell Identifier and Nib
     public let id = "movieCollectionTableViewCell"
     public let nib = UINib(nibName: "MovieCollectionTableViewCell", bundle: nil)
     
+    // MARK: - Properties
     private var movies = [Movie]()
     private let cell = MovieCollectionViewCell()
     
     var row = Int()
     
+    // MARK: - Lifecycle Methods
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         
+        configureCollectionView()
+    }
+    
+    // MARK: - Actions
+    @IBAction func seeAllBtnTapped(_ sender: Any) {
+        delegate?.seeAllButtonTapped(row: row)
+    }
+    
+    // MARK: - Private Methods
+    private func configureCollectionView() {
         movieCollectionView.delegate = self
         movieCollectionView.dataSource = self
         movieCollectionView.showsHorizontalScrollIndicator = false
         movieCollectionView.register(cell.nib, forCellWithReuseIdentifier: cell.id)
     }
     
-    @IBAction func seeAllBtnTapped(_ sender: Any) {
-        delegate?.seeAllButtonTapped(row: row)
-    }
-    
+    // MARK: - Public Methods
     public func setData(with movies: [Movie]) {
         self.movies = movies
         movieCollectionView.reloadOnMainThread()
     }
 }
 
-
-//MARK CollectionView delegate and datasource
+// MARK: - CollectionView Delegate and DataSource
 extension MovieCollectionTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         movies.count

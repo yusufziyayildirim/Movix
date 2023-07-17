@@ -8,16 +8,21 @@
 import Foundation
 
 class SeeAllViewModel {
+    
+    // MARK: - Service
     let service: MovieServiceProtocol?
     
+    // MARK: - Properties
     var movies: Observable<[Movie]> = Observable([])
     private var page = 1
     var shouldDownloadMore: Bool = true
     
+    // MARK: - Initialization
     init(service: MovieServiceProtocol) {
         self.service = service
     }
     
+    // MARK: - Public Methods
     func getMovies(url: String){
         service?.getMovies(url: url, page: page, completion: { [weak self]  result in
             guard let self = self else { return }
