@@ -31,10 +31,10 @@ class MovieDetailViewModel{
             
             self.movie = movie
             delegate?.setData()
+            delegate?.changeLoadingViewState(isHidden: true)
         })
         
         getRecommendMovies()
-        delegate?.changeLoadingViewState(isHidden: true)
         getMovieVideoId(id: id)
     }
     
