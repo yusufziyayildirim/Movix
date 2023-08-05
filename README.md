@@ -8,4 +8,4 @@
 - ‎SDWebImageSwiftUI
 - YouTubeiOSPlayerHelper
 
-https://github.com/yusufziyayildirim/Movix/assets/101952885/04b6b2e9-9a58-402b-a0f4-7882454e331f
+https://github.com/yusufziyayildirim/Movix/assets/101952885/525e26e4-3e68-4668-9630-89f210ee67a3
